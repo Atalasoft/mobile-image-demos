@@ -86,9 +86,6 @@ class BarcodeCaptureViewController: UIViewController, kfxKUIBarCodeCaptureContro
         
         if barcodeControlInitialized == false {
 
-            kfxKUILogging.enableConsoleLogging(true)
-            kfxKENLogging.enableConsoleLogging(true)
-            kfxKUTLogging.enableConsoleLogging(true)
             captureControlView.delegate = self;
             captureControlView.guidingLine = kfxKUIGuidingLineLandscape
         }
@@ -108,8 +105,7 @@ class BarcodeCaptureViewController: UIViewController, kfxKUIBarCodeCaptureContro
         self.navigationController?.popViewController(animated: true)
     }
     
-    func barcodeCaptureControl(barcodeCaptureControl: kfxKUIBarCodeCaptureControl!,
-                               barcodeFound result : kfxKEDBarcodeResult, image:kfxKEDImage)
+    func barcodeCaptureControl(_ barcodeCaptureControl: kfxKUIBarCodeCaptureControl!, barcodeFound result: kfxKEDBarcodeResult!, image: kfxKEDImage!)
     {
         let barcodeInfo = BarcodeInfo()
         barcodeInfo.barcode = result
