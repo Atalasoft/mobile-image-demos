@@ -3,7 +3,7 @@
 //  Mobile Capture Demo
 //
 //  Created by Michael Chernikov on 14/04/16.
-//  Copyright © 2016 Atalasoft, a Kofax Company. All rights reserved.
+//  Copyright © 2016-2018 Atalasoft. All rights reserved.
 //
 
 import UIKit
@@ -13,32 +13,32 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
     
-    func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey : Any]? = nil) -> Bool {
         return true;
     }
 
-    func applicationWillResignActive(application: UIApplication) {
+    func applicationWillResignActive(_ application: UIApplication) {
     }
 
-    func applicationDidEnterBackground(application: UIApplication) {
+    func applicationDidEnterBackground(_ application: UIApplication) {
     }
 
-    func applicationWillEnterForeground(application: UIApplication) {
+    func applicationWillEnterForeground(_ application: UIApplication) {
     }
 
-    func applicationDidBecomeActive(application: UIApplication) {
+    func applicationDidBecomeActive(_ application: UIApplication) {
         Settings.validateLimitation()
         if Settings.ExceedLimitation {
-            let alert = UIAlertController(title: "Error", message: "You have reached your monthly usage limit.", preferredStyle: .Alert)
-            alert.addAction(UIAlertAction(title: "OK", style: .Default) { action -> Void in })
+            let alert = UIAlertController(title: "Error", message: "You have reached your monthly usage limit.", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default) { action -> Void in })
             
             if let wnd = window {
-                wnd.rootViewController?.presentViewController(alert, animated: true, completion: nil)
+                wnd.rootViewController?.present(alert, animated: true, completion: nil)
             }
         }
     }
 
-    func applicationWillTerminate(application: UIApplication) {
+    func applicationWillTerminate(_ application: UIApplication) {
     }
 
 

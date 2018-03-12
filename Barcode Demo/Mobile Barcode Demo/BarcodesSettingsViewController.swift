@@ -3,7 +3,7 @@
 //  Mobile Barcode Demo
 //
 //  Created by Michael Chernikov on 27/05/16.
-//  Copyright © 2016 Atalasoft, a Kofax Company. All rights reserved.
+//  Copyright © 2016-2018 Atalasoft, a Kofax Company. All rights reserved.
 //
 
 import UIKit
@@ -15,22 +15,18 @@ class BarcodesSettingsViewController: BaseSettingsViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        switches = [UISwitch?](count: BarcodeTypes.SymbologiesCount, repeatedValue: nil)
+        switches = [UISwitch?](repeating: nil, count: BarcodeTypes.SymbologiesCount)
     }
     
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return 1;
-    }
-    
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return BarcodeTypes.SymbologiesCount
     }
-    
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        var cell: UITableViewCell! = tableView.dequeueReusableCellWithIdentifier(SettingsTableViewController.cellIdentifier)
+
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        var cell: UITableViewCell! = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewController.cellIdentifier)
         
         if cell == nil {
-            cell = UITableViewCell(style: .Default, reuseIdentifier: SettingsTableViewController.cellIdentifier)
+            cell = UITableViewCell(style: .default, reuseIdentifier: SettingsTableViewController.cellIdentifier)
         }
         
         assert(indexPath.section == 0)
@@ -39,18 +35,18 @@ class BarcodesSettingsViewController: BaseSettingsViewController {
         
         var switchControl = switches?[indexPath.row]
         if switchControl == nil {
-            switchControl = createSwitchWithTag(indexPath.row, value: BarcodeTypes.BarcodeSymbologyToString(kfxKUISymbology(UInt32(indexPath.row))))
+            switchControl = createSwitchWithTag(tag: indexPath.row, value: BarcodeTypes.BarcodeSymbologyToString(symbology: kfxKUISymbology(UInt32(indexPath.row))) as AnyObject)
             cell.accessoryView = switchControl
-            switchControl?.addTarget(self, action: #selector(switchValueChanged), forControlEvents: .ValueChanged)
-            cell.textLabel?.text = BarcodeTypes.BarcodeSymbologyToString(kfxKUISymbology(UInt32(indexPath.row)))
+            switchControl?.addTarget(self, action: #selector(switchValueChanged), for: .valueChanged)
+            cell.textLabel?.text = BarcodeTypes.BarcodeSymbologyToString(symbology: kfxKUISymbology(UInt32(indexPath.row)))
             
             switches?[indexPath.row] = switchControl
         }
         
         cell.accessoryView = switchControl
-        switchControl?.on = settings.barcodes[indexPath.row]
+        switchControl?.isOn = settings.barcodes[indexPath.row]
         
-        cell.selectionStyle = .None
+        cell.selectionStyle = .none
         
         return cell
     }

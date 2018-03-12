@@ -3,7 +3,7 @@
 //  Mobile Capture Demo
 //
 //  Created by Michael Chernikov on 10/05/16.
-//  Copyright © 2016 Atalasoft, a Kofax Company. All rights reserved.
+//  Copyright © 2016-2018 Atalasoft. All rights reserved.
 //
 
 import UIKit
@@ -30,13 +30,13 @@ class PreviewImageViewController: UIViewController, kfxKIPDelegate, MFMailCompos
         saveGalleryButton.ConfigureButton(image: "gallery.png")
         sendMailButton.ConfigureButton(image: "email.png")
         
-        imageView.layer.borderColor = UIColor(red: 1, green: 0, blue: 0, alpha: 1.0).CGColor
+        imageView.layer.borderColor = UIColor(red: 1, green: 0, blue: 0, alpha: 1.0).cgColor
         
-        sendMailButton.enabled = MFMailComposeViewController.canSendMail()
+        sendMailButton.isEnabled = MFMailComposeViewController.canSendMail()
         
         navigationItem.setHidesBackButton(true, animated: true);
         
-        closeButton = UIBarButtonItem(title: "Close", style: .Done, target: self, action: #selector(onClosePreview))
+        closeButton = UIBarButtonItem(title: "Close", style: .done, target: self, action: #selector(onClosePreview))
         navigationItem.rightBarButtonItem = closeButton
     }
     
@@ -45,11 +45,11 @@ class PreviewImageViewController: UIViewController, kfxKIPDelegate, MFMailCompos
         return (navigationController?.view)!
     }
     
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
         if !openedEmail {
-            self.performSelector(#selector(processImage), withObject:nil, afterDelay: 0.25)
+            self.perform(#selector(processImage), with:nil, afterDelay: 0.25)
         }
         
         openedEmail = false
@@ -59,9 +59,9 @@ class PreviewImageViewController: UIViewController, kfxKIPDelegate, MFMailCompos
         super.didReceiveMemoryWarning()
     }
     
-    func processImage() {
+    @objc func processImage() {
         
-        waitingIndicator.show("Processing image...", superview: GetTopView())
+        waitingIndicator.show(text: "Processing image...", superview: GetTopView())
         
         let ipSettings = Settings()
         if !Settings.UseDefaultIPSettings() {
@@ -71,57 +71,56 @@ class PreviewImageViewController: UIViewController, kfxKIPDelegate, MFMailCompos
         let basicSettings = kfxKEDBasicSettingsProfile()
         
         if ipSettings.Mode == 0 {
-            basicSettings.specifyOutputBitDepth(KED_BITDEPTH_BITONAL)
+            basicSettings?.specifyOutputBitDepth(KED_BITDEPTH_BITONAL)
         } else if ipSettings.Mode == 1 {
-            basicSettings.specifyOutputBitDepth(KED_BITDEPTH_GRAYSCALE)
+            basicSettings?.specifyOutputBitDepth(KED_BITDEPTH_GRAYSCALE)
         } else {
-            basicSettings.specifyOutputBitDepth(KED_BITDEPTH_COLOR)
+            basicSettings?.specifyOutputBitDepth(KED_BITDEPTH_COLOR)
         }
         
-        basicSettings.doCrop = ipSettings.AutoCrop ? KED_CROP_AUTO : KED_CROP_NONE
-        basicSettings.doRotate = ipSettings.AutoRotate ? KED_AUTOMATIC : KED_ROTATE_NONE
-        basicSettings.doDeskew = ipSettings.Deskew
+        basicSettings?.doCrop = ipSettings.AutoCrop ? KED_CROP_AUTO : KED_CROP_NONE
+        basicSettings?.doRotate = ipSettings.AutoRotate ? KED_AUTOMATIC : KED_ROTATE_NONE
+        basicSettings?.doDeskew = ipSettings.Deskew
         
         if ipSettings.Scale == 1 {
-            basicSettings.outputDPI = 200
+            basicSettings?.outputDPI = 200
         } else if ipSettings.Scale == 2 {
-            basicSettings.outputDPI = 300
+            basicSettings?.outputDPI = 300
         } else if ipSettings.Mode == 3 {
-            basicSettings.outputDPI = 400
+            basicSettings?.outputDPI = 400
         }
         
-        processor.delegate = self
-        processor.basicSettingsProfile = basicSettings
+        processor?.delegate = self
+        processor?.basicSettingsProfile = basicSettings
         
-        let res = processor.processImage(image)
+        let res = processor?.processImage(image)
         if res != KMC_SUCCESS {
-            print("Error \(res)")
             waitingIndicator.hide()
             
-            let alert = UIAlertController(title: "Error", message: "Failed to run image processing. Error: \(res)", preferredStyle: .Alert)
-            alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
-            self.presentViewController(alert, animated: true, completion: nil)
+            let alert = UIAlertController(title: "Error", message: "Failed to run image processing. Error: \(String(describing: res))", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
         }
     }
     
     @IBAction func onClosePreview() {
-        let confirmAlert = UIAlertController(title: "", message: "Are you sure to close?", preferredStyle: .Alert)
-        confirmAlert.addAction(UIAlertAction(title: "OK", style: .Default, handler: { (action) in
-            self.navigationController?.popToRootViewControllerAnimated(true)
+        let confirmAlert = UIAlertController(title: "", message: "Are you sure to close?", preferredStyle: .alert)
+        confirmAlert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (action) in
+            self.navigationController?.popToRootViewController(animated: true)
             }))
-        confirmAlert.addAction(UIAlertAction(title: "Cancel", style: .Default, handler: nil))
+        confirmAlert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: nil))
         
-        self.presentViewController(confirmAlert, animated: true, completion: nil)
+        self.present(confirmAlert, animated: true, completion: nil)
     }
     
     @IBAction func onSaveImageToGallery() {
         
         if let kfxImage = image {
-            dispatch_async(dispatch_get_main_queue(), {
-                self.waitingIndicator.show("Saving image...", superview: self.GetTopView())
-            })
+            DispatchQueue.main.async {
+                self.waitingIndicator.show(text: "Saving image...", superview: self.GetTopView())
+            }
             
-            PhotoAlbum.sharedInstance.saveImage(kfxImage.getImageBitmap(), completionHandler: {(result: Bool, error: NSError?) in
+            PhotoAlbum.sharedInstance.saveImage(image: kfxImage.getBitmap(), completionHandler: {(result: Bool, error: NSError?) in
                 
                 var title = ""
                 var message = ""
@@ -132,15 +131,15 @@ class PreviewImageViewController: UIViewController, kfxKIPDelegate, MFMailCompos
                     title = "Error"
                     message = "Failed to save image to gallery."
                 }
-                dispatch_async(dispatch_get_main_queue(), {
+                DispatchQueue.main.async {
                     
                     self.waitingIndicator.hide()
                     
-                    let confirmAlert = UIAlertController(title: title, message: message, preferredStyle: .Alert)
-                    confirmAlert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
+                    let confirmAlert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+                    confirmAlert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
                     
-                    self.presentViewController(confirmAlert, animated: true, completion: nil)
-                })
+                    self.present(confirmAlert, animated: true, completion: nil)
+                }
             })
         }
     }
@@ -157,38 +156,38 @@ class PreviewImageViewController: UIViewController, kfxKIPDelegate, MFMailCompos
         mailComposeVC.mailComposeDelegate = self
         
         if let kfxImage = image {
-            mailComposeVC.addAttachmentData(UIImageJPEGRepresentation(kfxImage.getImageBitmap(), 1.0)!, mimeType: "image/png", fileName:  "image.png")
+            mailComposeVC.addAttachmentData(UIImageJPEGRepresentation(kfxImage.getBitmap(), 1.0)!, mimeType: "image/png", fileName:  "image.png")
         }
         
         mailComposeVC.setSubject("Email Subject")
         
-        self.presentViewController(mailComposeVC, animated: true, completion: nil)
+        self.present(mailComposeVC, animated: true, completion: nil)
         
     }
     
-    func imageOut(status: Int32, withMsg errorMsg: String!, andOutputImage kfxImage: kfxKEDImage!) {
+    func imageOut(_ status: Int32, withMsg errorMsg: String!, andOutputImage kfxImage: kfxKEDImage!) {
         
-        dispatch_async(dispatch_get_main_queue(), {
+        DispatchQueue.main.async {
             self.image = kfxImage
             self.imageView.setImage(self.image)
             self.waitingIndicator.hide()
-        })
+        }
     }
     
-    func processProgress(status: Int32, withMsg errorMsg: String!, imageID: String!, andProgress percent: Int32) {
-        dispatch_async(dispatch_get_main_queue(), {
-            self.waitingIndicator.updateMessage("Processing image... \(percent)%")
-        })
+    func processProgress(_ status: Int32, withMsg errorMsg: String!, imageID: String!, andProgress percent: Int32) {
+        DispatchQueue.main.async {
+            self.waitingIndicator.updateMessage(text: "Processing image... \(percent)%")
+        }
     }
     
-    func analysisProgress(status: Int32, withMsg errorMsg: String!, imageID: String!, andProgress percent: Int32) {
+    func analysisProgress(_ status: Int32, withMsg errorMsg: String!, imageID: String!, andProgress percent: Int32) {
     }
     
-    func analysisComplete(status: Int32, withMsg errorMsg: String!, andOutputImage kfxImage: kfxKEDImage!) {
+    func analysisComplete(_ status: Int32, withMsg errorMsg: String!, andOutputImage kfxImage: kfxKEDImage!) {
     }
     
     
-    func mailComposeController(controller: MFMailComposeViewController, didFinishWithResult result: MFMailComposeResult, error: NSError?) {
-        self.dismissViewControllerAnimated(true, completion: nil)
+    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+        self.dismiss(animated: true, completion: nil)
     }
 }

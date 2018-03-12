@@ -3,7 +3,7 @@
 //  Mobile Capture Demo
 //
 //  Created by Michael Chernikov on 15/04/16.
-//  Copyright © 2016 Atalasoft, a Kofax Company. All rights reserved.
+//  Copyright © 2016-2018 Atalasoft, a Kofax Company. All rights reserved.
 //
 
 #ifndef Mobile_Barcode_Demo_Bridging_Header_h

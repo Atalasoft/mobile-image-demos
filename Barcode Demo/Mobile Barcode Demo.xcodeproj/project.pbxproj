@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 46;
+	objectVersion = 48;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -39,6 +39,7 @@
 		B2CCCE441CFC286C00C1DB59 /* torch_off@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B2CCCE371CFC286C00C1DB59 /* torch_off@2x.png */; };
 		B2CCCE451CFC286C00C1DB59 /* torchon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B2CCCE381CFC286C00C1DB59 /* torchon@2x.png */; };
 		B2CCCE491CFC4CD900C1DB59 /* beep-29.wav in Resources */ = {isa = PBXBuildFile; fileRef = B2CCCE481CFC4CD900C1DB59 /* beep-29.wav */; };
+		B2D3BC442052EE1A00184665 /* libsqlite3.0.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = B2D3BC432052EE1A00184665 /* libsqlite3.0.tbd */; };
 		B2D3BECC1CEF3E4F00C439C6 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2D3BEB71CEF3E4F00C439C6 /* AssetsLibrary.framework */; };
 		B2D3BECD1CEF3E4F00C439C6 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2D3BEB81CEF3E4F00C439C6 /* AudioToolbox.framework */; };
 		B2D3BECE1CEF3E4F00C439C6 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2D3BEB91CEF3E4F00C439C6 /* MobileCoreServices.framework */; };
@@ -98,6 +99,7 @@
 		B2CCCE371CFC286C00C1DB59 /* torch_off@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "torch_off@2x.png"; path = "Resources/Images/torch_off@2x.png"; sourceTree = "<group>"; };
 		B2CCCE381CFC286C00C1DB59 /* torchon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "torchon@2x.png"; path = "Resources/Images/torchon@2x.png"; sourceTree = "<group>"; };
 		B2CCCE481CFC4CD900C1DB59 /* beep-29.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "beep-29.wav"; sourceTree = "<group>"; };
+		B2D3BC432052EE1A00184665 /* libsqlite3.0.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.0.tbd; path = usr/lib/libsqlite3.0.tbd; sourceTree = SDKROOT; };
 		B2D3BEB71CEF3E4F00C439C6 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 		B2D3BEB81CEF3E4F00C439C6 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		B2D3BEB91CEF3E4F00C439C6 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
@@ -126,6 +128,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B2D3BC442052EE1A00184665 /* libsqlite3.0.tbd in Frameworks */,
 				B280628F1D20FBE5009DD03D /* MobileSDK.framework in Frameworks */,
 				B2D3BECE1CEF3E4F00C439C6 /* MobileCoreServices.framework in Frameworks */,
 				B2D3BED11CEF3E4F00C439C6 /* UIKit.framework in Frameworks */,
@@ -238,6 +241,7 @@
 		B2D3BEB61CEF3E4200C439C6 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				B2D3BC432052EE1A00184665 /* libsqlite3.0.tbd */,
 				B280628C1D20FBE5009DD03D /* MobileSDK.framework */,
 				B280628D1D20FBE5009DD03D /* SDKStrings.bundle */,
 				B280628E1D20FBE5009DD03D /* uiimages.bundle */,
@@ -291,7 +295,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0730;
-				LastUpgradeCheck = 0730;
+				LastUpgradeCheck = 0920;
 				ORGANIZATIONNAME = Atalasoft;
 				TargetAttributes = {
 					B208E25F1CEF3BEB0053F137 = {
@@ -301,7 +305,7 @@
 				};
 			};
 			buildConfigurationList = B208E25B1CEF3BEB0053F137 /* Build configuration list for PBXProject "Mobile Barcode Demo" */;
-			compatibilityVersion = "Xcode 3.2";
+			compatibilityVersion = "Xcode 8.0";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -400,13 +404,21 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -447,13 +459,21 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -474,6 +494,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PROVISIONING_PROFILE = "5b8c5cfc-5eb4-46af-9919-a160838d9512";
 				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -481,9 +502,11 @@
 		B208E2891CEF3BEB0053F137 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				DEVELOPMENT_TEAM = B9C7GRQCYQ;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -496,16 +519,21 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.kofax.Mobile-Barcode-Demo";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "375352da-dbad-4b15-82e6-8aecb429388a";
+				PROVISIONING_PROFILE_SPECIFIER = "Atalasoft MobileImage Barcode App Store";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/Mobile-Barcode-Demo-Bridging-Header.h";
+				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
 		};
 		B208E28A1CEF3BEB0053F137 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				DEVELOPMENT_TEAM = B9C7GRQCYQ;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -518,7 +546,10 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.kofax.Mobile-Barcode-Demo";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "375352da-dbad-4b15-82e6-8aecb429388a";
+				PROVISIONING_PROFILE_SPECIFIER = "Atalasoft MobileImage Barcode App Store";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/Mobile-Barcode-Demo-Bridging-Header.h";
+				SWIFT_VERSION = 4.0;
 			};
 			name = Release;
 		};

@@ -3,7 +3,7 @@
 //  Mobile Capture Demo
 //
 //  Created by Michael Chernikov on 10/05/16.
-//  Copyright © 2016 Atalasoft, a Kofax Company. All rights reserved.
+//  Copyright © 2016-2018 Atalasoft, a Kofax Company. All rights reserved.
 //
 
 import UIKit
@@ -23,24 +23,24 @@ class PreviewBarcodeViewController: UITableViewController, MFMailComposeViewCont
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        retakeButton = UIButton(frame: CGRectMake(0, 5, 60, 60))
-        sendMailButton = UIButton(frame: CGRectMake(0, 5, 60, 60))
+        retakeButton = UIButton(frame: CGRect(x:0, y:5, width:60, height:60))
+        sendMailButton = UIButton(frame: CGRect(x:0, y:5, width:60, height:60))
             
         retakeButton.ConfigureButton(image: "camera_button_normal.png")
-        retakeButton.addTarget(self, action: #selector(onRetakePicture), forControlEvents: .TouchUpInside)
+        retakeButton.addTarget(self, action: #selector(onRetakePicture), for: .touchUpInside)
         sendMailButton.ConfigureButton(image: "email.png")
-        sendMailButton.addTarget(self, action: #selector(onSendImageByMail), forControlEvents: .TouchUpInside)
+        sendMailButton.addTarget(self, action: #selector(onSendImageByMail), for: .touchUpInside)
         
-        let closeButton = UIBarButtonItem(title: "Close", style: .Done, target: self, action: #selector(onClosePreview))
+        let closeButton = UIBarButtonItem(title: "Close", style: .done, target: self, action: #selector(onClosePreview))
         navigationItem.rightBarButtonItem = closeButton
         
-        sendMailButton.enabled = MFMailComposeViewController.canSendMail()
+        sendMailButton.isEnabled = MFMailComposeViewController.canSendMail()
         
         navigationItem.setHidesBackButton(true, animated: true);
         
         tableView.rowHeight = UITableViewAutomaticDimension
         
-        tableView.separatorStyle = .None
+        tableView.separatorStyle = .none
 
         tableView.estimatedRowHeight = 70.0;
         tableView.rowHeight = UITableViewAutomaticDimension;
@@ -69,15 +69,15 @@ class PreviewBarcodeViewController: UITableViewController, MFMailComposeViewCont
         if let bcInfo = barcodeInfo {
             var barcodeValue = bcInfo.barcode.value
             if bcInfo.barcode.dataFormat == KEDBarcodeDataFormats.init(2) {
-                let data = NSData(base64EncodedString: bcInfo.barcode.value, options: NSDataBase64DecodingOptions(rawValue: 0))
-                barcodeValue = String(data: data!, encoding: NSUTF8StringEncoding)!
+                let data = NSData(base64Encoded: bcInfo.barcode.value, options: NSData.Base64DecodingOptions(rawValue: 0))
+                barcodeValue = String(data: data! as Data, encoding: String.Encoding.utf8)!
             }
             
             mailBody =  "<html>" +
                             "<body>" +
                                 "<p>Barcode information:</p>" +
-                                "<p>type: \(BarcodeTypes.BarcodeTypeToString(bcInfo.barcode.type))</p>" +
-                                "<p>value: \(barcodeValue)</p>" +
+                "<p>type: \(BarcodeTypes.BarcodeTypeToString(barcodeType: bcInfo.barcode.type))</p>" +
+                "<p>value: \(String(describing: barcodeValue))</p>" +
                             "</body>" +
                         "</html>"
         } else {
@@ -86,62 +86,53 @@ class PreviewBarcodeViewController: UITableViewController, MFMailComposeViewCont
         
         mailComposeVC.setMessageBody(mailBody, isHTML: true)
         
-        self.presentViewController(mailComposeVC, animated: true, completion: nil)
+        self.present(mailComposeVC, animated: true, completion: nil)
         
     }
     
     @IBAction func onRetakePicture() {
-        navigationController?.popViewControllerAnimated(false)
+        navigationController?.popViewController(animated: false)
     }
     
     @IBAction func onClosePreview() {
-        let confirmAlert = UIAlertController(title: "", message: "Are you sure to close?", preferredStyle: .Alert)
-        confirmAlert.addAction(UIAlertAction(title: "OK", style: .Default, handler: { (action) in
-            self.navigationController?.popToRootViewControllerAnimated(true)
+        let confirmAlert = UIAlertController(title: "", message: "Are you sure to close?", preferredStyle: .alert)
+        confirmAlert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (action) in
+            self.navigationController?.popToRootViewController(animated: true)
         }))
-        confirmAlert.addAction(UIAlertAction(title: "Cancel", style: .Default, handler: nil))
+        confirmAlert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: nil))
         
-        self.presentViewController(confirmAlert, animated: true, completion: nil)
+        self.present(confirmAlert, animated: true, completion: nil)
     }
     
-    func mailComposeController(controller: MFMailComposeViewController, didFinishWithResult result: MFMailComposeResult, error: NSError?) {
-        switch (result) {
-            case MFMailComposeResultSent:
-                print("Email sent")
-                break
-            
-            default:
-                print("\(result)")
-        }
-        
-        self.dismissViewControllerAnimated(true, completion: nil)
+    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+        self.dismiss(animated: true, completion: nil)
     }
     
     // MARK: - Table view data source
     
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 2
     }
     
     func createPreviewCell(tableView: UITableView) -> UITableViewCell {
-        var cell: UITableViewCell! = tableView.dequeueReusableCellWithIdentifier(PreviewBarcodeViewController.barcodeImageCellIdentifier)
+        var cell: UITableViewCell! = tableView.dequeueReusableCell(withIdentifier: PreviewBarcodeViewController.barcodeImageCellIdentifier)
         if cell == nil {
-            cell = UITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: PreviewBarcodeViewController.barcodeImageCellIdentifier)
+            cell = UITableViewCell(style: UITableViewCellStyle.default, reuseIdentifier: PreviewBarcodeViewController.barcodeImageCellIdentifier)
         }
         
         var image : UIImage? = nil
-        if let bcInfo = barcodeInfo where bcInfo.image != nil {
-            image = bcInfo.image?.getImageBitmap()
+        if let bcInfo = barcodeInfo, bcInfo.image != nil {
+            image = bcInfo.image?.getBitmap()
         }
         
         let imageView = UIImageView(image: image)
         
-        imageView.contentMode = .ScaleAspectFill
-        imageView.frame = CGRectMake(0,0,tableView.bounds.width, tableView.frame.height)
+        imageView.contentMode = .scaleAspectFill
+        imageView.frame = CGRect(x:0, y:0, width:tableView.bounds.width, height:tableView.frame.height)
         cell.addSubview(imageView)
         var frame = cell.bounds
         frame.size.height = tableView.frame.height
@@ -151,33 +142,33 @@ class PreviewBarcodeViewController: UITableViewController, MFMailComposeViewCont
     }
     
     func createBarcodeInfoCell(tableView: UITableView) -> UITableViewCell {
-        let bcCell: BarcodeInfoCell! = tableView.dequeueReusableCellWithIdentifier(PreviewBarcodeViewController.barcodeInfoCellIdentifier) as! BarcodeInfoCell!
+        let bcCell: BarcodeInfoCell! = tableView.dequeueReusableCell(withIdentifier: PreviewBarcodeViewController.barcodeInfoCellIdentifier) as! BarcodeInfoCell!
         
         if let bcInfo = barcodeInfo {
-            bcCell.setupBarcodeInfoCell(bcInfo)
+            bcCell.setupBarcodeInfoCell(bcInfo: bcInfo)
         }
         
         return bcCell
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 
         var cell: UITableViewCell!
         
         if indexPath.row == 0
         {
-            cell = createBarcodeInfoCell(tableView)
+            cell = createBarcodeInfoCell(tableView: tableView)
         } else {
-            cell = createPreviewCell(tableView)
+            cell = createPreviewCell(tableView: tableView)
         }
     
-        cell.accessoryType = .None
-        cell.selectionStyle = .None
+        cell.accessoryType = .none
+        cell.selectionStyle = .none
         
         return cell
     }
     
-    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if (indexPath.row == 0) {
             return -1
         }
@@ -185,18 +176,18 @@ class PreviewBarcodeViewController: UITableViewController, MFMailComposeViewCont
         return tableView.frame.height
     }
 
-    override func tableView(tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+    override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         if section == 0 {
             return 70
         }
         
         return 0
     }
-    
-    override func tableView(tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+
+    override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         if section == 0 {
             if buttonsView == nil {
-                buttonsView = UIView(frame: CGRectMake(0, 0, tableView.frame.width, 70))
+                buttonsView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.width, height: 70))
                 
                 var retakeButtonFrame = retakeButton.frame
                 retakeButtonFrame.origin.x = buttonsView.frame.width / 4 - retakeButtonFrame.width / 2

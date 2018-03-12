@@ -3,7 +3,7 @@
 //  Mobile Capture Demo
 //
 //  Created by Michael Chernikov on 15/04/16.
-//  Copyright © 2016 Atalasoft, a Kofax Company. All rights reserved.
+//  Copyright © 2016-2018 Atalasoft. All rights reserved.
 //
 
 import UIKit
@@ -27,26 +27,26 @@ class HomeViewController: UIViewController {
             let lic = KFX_ERROR_IMAGE_PROCESSOR(rawValue: UInt32(license.setMobileSDKLicense(HomeViewController.evrsLIcense)))
             
             if lic == KMC_IP_LICENSE_EXPIRED || lic == KMC_IP_LICENSE_INVALID {
-                showErrorMessage(lic)
+                showErrorMessage(licenseErrorCode: lic)
             }
         }
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(applicationIsActive), name: UIApplicationDidBecomeActiveNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(applicationIsActive), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
         
         cameraButton?.ConfigureButton(image: "camera_button_normal.png")
         
         navigationItem.title = "MobileImage Document Capture"
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        cameraButton.userInteractionEnabled = !Settings.ExceedLimitation
+        cameraButton.isUserInteractionEnabled = !Settings.ExceedLimitation
         navigationController?.setNavigationBarHidden(false, animated: true)
     }
     
-    func applicationIsActive(notification: NSNotification) {
-        cameraButton.userInteractionEnabled = !Settings.ExceedLimitation
+    @objc func applicationIsActive(notification: NSNotification) {
+        cameraButton.isUserInteractionEnabled = !Settings.ExceedLimitation
     }
     
     func showErrorMessage(licenseErrorCode: KFX_ERROR_IMAGE_PROCESSOR) {
@@ -57,35 +57,35 @@ class HomeViewController: UIViewController {
         var alertTitle: String
         var alertDescription: String
         
-        let split = message.characters.split {$0 == ":"}.map(String.init)
+        let split = message?.split {$0 == ":"}.map(String.init)
         
-        if split.count == 2
+        if split?.count == 2
         {
-            alertTitle = split[0]
-            alertDescription = String(format: "%@\n\n%@", split[1], description)
+            alertTitle = split![0]
+            alertDescription = String(format: "%@\n\n%@", split![1], description!)
             
         }
-        else if split.count > 2
+        else if split!.count > 2
         {
             var info = "";
             
-            for item in split {
-                info = info.stringByAppendingFormat("%@", item)
+            for item in split! {
+                info = info.appendingFormat("%@", item)
             }
             
-            alertTitle = split[0]
-            alertDescription = String(format: "%@\n\n%@", info, description)
+            alertTitle = split![0]
+            alertDescription = String(format: "%@\n\n%@", info, description!)
         }
         else
         {
             alertTitle = "License Error!!!"
-            alertDescription = String(format: "%@\n\n%@", message, description)
+            alertDescription = String(format: "%@\n\n%@", message!, description!)
             
         }
         
-        let alert = UIAlertController(title: alertTitle, message: alertDescription, preferredStyle: .Alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .Default) { action -> Void in })
-        self.presentViewController(alert, animated: true, completion: nil)
+        let alert = UIAlertController(title: alertTitle, message: alertDescription, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default) { action -> Void in })
+        self.present(alert, animated: true, completion: nil)
     }
     
     override func didReceiveMemoryWarning() {

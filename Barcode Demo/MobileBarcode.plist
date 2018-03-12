@@ -2,11 +2,25 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+  <key>compileBitcode</key>
+  <false/>
     <key>method</key>
     <string>app-store</string>
-    <key>teamID</key>
-    <string>B9C7GRQCYQ</string>
+  <key>provisioningProfiles</key>
+  <dict>
+    <key>com.kofax.Mobile-Barcode-Demo</key>
+    <string>36ce25dc-aa7c-4d20-9a42-ca93138a6bcb</string>
+  </dict>
+  <key>signingCertificate</key>
+  <string>iPhone Distribution: Kofax, Inc.</string>
+  <key>signingStyle</key>
+  <string>manual</string>
     <key>uploadSymbols</key>
     <true/>
+    <key>teamID</key>
+    <string>B9C7GRQCYQ</string>
+  <key>thinning</key>
+  <string>&lt;none&gt;</string>
+
 </dict>
 </plist>

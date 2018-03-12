@@ -3,7 +3,7 @@
 //  Mobile Capture Demo
 //
 //  Created by Michael Chernikov on 01/05/16.
-//  Copyright © 2016 Atalasoft, a Kofax Company. All rights reserved.
+//  Copyright © 2016-2018 Atalasoft. All rights reserved.
 //
 
 import Foundation
@@ -52,59 +52,59 @@ class Settings {
 
     func load() {
         
-        let userDefaults = NSUserDefaults.standardUserDefaults()
+        let userDefaults = UserDefaults.standard
 
         let keys = userDefaults.dictionaryRepresentation().keys
         
         // load camera settings
         if keys.contains(Settings.CameraShowGalleryKey) {
-            CameraShowGallery = userDefaults.boolForKey(Settings.CameraShowGalleryKey)
+            CameraShowGallery = userDefaults.bool(forKey: Settings.CameraShowGalleryKey)
         }
         if keys.contains(Settings.StabilityDelayKey) {
-            StabilityDelay = Int32(userDefaults.integerForKey(Settings.StabilityDelayKey))
+            StabilityDelay = Int32(userDefaults.integer(forKey: Settings.StabilityDelayKey))
         }
         if keys.contains(Settings.PitchThresholdKey) {
-            PitchThreshold = Int32(userDefaults.integerForKey(Settings.PitchThresholdKey))
+            PitchThreshold = Int32(userDefaults.integer(forKey: Settings.PitchThresholdKey))
         }
         if keys.contains(Settings.RollThresholdKey) {
-            RollThreshold = Int32(userDefaults.integerForKey(Settings.RollThresholdKey))
+            RollThreshold = Int32(userDefaults.integer(forKey: Settings.RollThresholdKey))
         }
         if keys.contains(Settings.ManualCaptureTimeKey) {
-            ManualCaptureTime = Int32(userDefaults.integerForKey(Settings.ManualCaptureTimeKey))
+            ManualCaptureTime = Int32(userDefaults.integer(forKey: Settings.ManualCaptureTimeKey))
         }
         if keys.contains(Settings.AutoTorchKey) {
-            AutoTorch = userDefaults.boolForKey(Settings.AutoTorchKey)
+            AutoTorch = userDefaults.bool(forKey: Settings.AutoTorchKey)
         }
         
         UseDefaultSettings = Settings.UseDefaultIPSettings()
         if keys.contains(Settings.ModeKey) {
-            Mode = userDefaults.integerForKey(Settings.ModeKey)
+            Mode = userDefaults.integer(forKey: Settings.ModeKey)
         }
         if keys.contains(Settings.AutoCropKey) {
-            AutoCrop = userDefaults.boolForKey(Settings.AutoCropKey)
+            AutoCrop = userDefaults.bool(forKey: Settings.AutoCropKey)
         }
         if keys.contains(Settings.AutoRotateKey) {
-            AutoRotate = userDefaults.boolForKey(Settings.AutoRotateKey)
+            AutoRotate = userDefaults.bool(forKey: Settings.AutoRotateKey)
         }
         if keys.contains(Settings.DeskewKey) {
-            Deskew = userDefaults.boolForKey(Settings.DeskewKey)
+            Deskew = userDefaults.bool(forKey: Settings.DeskewKey)
         }
         if keys.contains(Settings.ScaleKey) {
-            Scale = userDefaults.integerForKey(Settings.ScaleKey)
+            Scale = userDefaults.integer(forKey: Settings.ScaleKey)
         }
     }
     
     func save() {
         
-        let userDefaults = NSUserDefaults.standardUserDefaults()
+        let userDefaults = UserDefaults.standard
         
         // save camera settings
-        userDefaults.setBool(CameraShowGallery, forKey: Settings.CameraShowGalleryKey)
-        userDefaults.setInteger(Int(StabilityDelay), forKey: Settings.StabilityDelayKey)
-        userDefaults.setInteger(Int(PitchThreshold), forKey: Settings.PitchThresholdKey)
-        userDefaults.setInteger(Int(RollThreshold), forKey: Settings.RollThresholdKey)
-        userDefaults.setInteger(Int(ManualCaptureTime), forKey: Settings.ManualCaptureTimeKey)
-        userDefaults.setBool(AutoTorch, forKey: Settings.AutoTorchKey)
+        userDefaults.set(CameraShowGallery, forKey: Settings.CameraShowGalleryKey)
+        userDefaults.set(Int(StabilityDelay), forKey: Settings.StabilityDelayKey)
+        userDefaults.set(Int(PitchThreshold), forKey: Settings.PitchThresholdKey)
+        userDefaults.set(Int(RollThreshold), forKey: Settings.RollThresholdKey)
+        userDefaults.set(Int(ManualCaptureTime), forKey: Settings.ManualCaptureTimeKey)
+        userDefaults.set(AutoTorch, forKey: Settings.AutoTorchKey)
         
         saveIPSettings()
         
@@ -112,10 +112,10 @@ class Settings {
     }
 
     static func UseDefaultIPSettings() -> Bool {
-        let userDefaults = NSUserDefaults.standardUserDefaults()
+        let userDefaults = UserDefaults.standard
         
         if userDefaults.dictionaryRepresentation().keys.contains(Settings.UseDefaultSettingsKey) {
-            return userDefaults.boolForKey(Settings.UseDefaultSettingsKey)
+            return userDefaults.bool(forKey: Settings.UseDefaultSettingsKey)
         }
         
         return true
@@ -123,24 +123,24 @@ class Settings {
     
     
     func saveIPSettings() {
-        let userDefaults = NSUserDefaults.standardUserDefaults()
+        let userDefaults = UserDefaults.standard
         
-        userDefaults.setBool(UseDefaultSettings, forKey: Settings.UseDefaultSettingsKey)
-        userDefaults.setInteger(Mode, forKey: Settings.ModeKey)
-        userDefaults.setBool(AutoCrop, forKey: Settings.AutoCropKey)
-        userDefaults.setBool(AutoRotate, forKey: Settings.AutoRotateKey)
-        userDefaults.setBool(Deskew, forKey: Settings.DeskewKey)
-        userDefaults.setInteger(Scale, forKey: Settings.ScaleKey)
+        userDefaults.set(UseDefaultSettings, forKey: Settings.UseDefaultSettingsKey)
+        userDefaults.set(Mode, forKey: Settings.ModeKey)
+        userDefaults.set(AutoCrop, forKey: Settings.AutoCropKey)
+        userDefaults.set(AutoRotate, forKey: Settings.AutoRotateKey)
+        userDefaults.set(Deskew, forKey: Settings.DeskewKey)
+        userDefaults.set(Scale, forKey: Settings.ScaleKey)
         
         userDefaults.synchronize()
     }
     
     static func MonthOfDate(date: NSDate) -> Int {
         
-        let calendar = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)
-        let dateComponents = calendar?.components(NSCalendarUnit.Month, fromDate: date)
+        let calendar = NSCalendar(calendarIdentifier: NSCalendar.Identifier.gregorian)
+        let dateComponents = calendar?.components(NSCalendar.Unit.month, from: date as Date)
         if let components = dateComponents {
-            return components.month
+            return components.month!
         }
         return -1
     }
@@ -150,18 +150,18 @@ class Settings {
             return
         }
         
-        let userDefaults = NSUserDefaults.standardUserDefaults()
+        let userDefaults = UserDefaults.standard
         let keys = userDefaults.dictionaryRepresentation().keys
         
         var exceeded = false
         if keys.contains(Settings.ShotsCounterKey) && keys.contains(Settings.UsageUpdateDateKey) {
-            let lastDateInterval : Int = userDefaults.integerForKey(Settings.UsageUpdateDateKey)
+            let lastDateInterval : Int = userDefaults.integer(forKey: Settings.UsageUpdateDateKey)
             
-            let lastDateMonth = MonthOfDate(NSDate(timeIntervalSince1970: NSTimeInterval(lastDateInterval)))
-            let todaysMonth = MonthOfDate(NSDate())
+            let lastDateMonth = MonthOfDate(date: NSDate(timeIntervalSince1970: TimeInterval(lastDateInterval)))
+            let todaysMonth = MonthOfDate(date: NSDate())
             
             if lastDateMonth == todaysMonth {
-                let shotsCounter = userDefaults.integerForKey(Settings.ShotsCounterKey)
+                let shotsCounter = userDefaults.integer(forKey: Settings.ShotsCounterKey)
                 exceeded = shotsCounter >= Settings.MaxUsagesPerMonth
             }
         }
@@ -174,24 +174,24 @@ class Settings {
             return
         }
         
-        let userDefaults = NSUserDefaults.standardUserDefaults()
+        let userDefaults = UserDefaults.standard
         let keys = userDefaults.dictionaryRepresentation().keys
         var shotsCounter = 0
         
         if keys.contains(Settings.ShotsCounterKey) && keys.contains(Settings.UsageUpdateDateKey) {
-            let lastDateInterval : Int = userDefaults.integerForKey(Settings.UsageUpdateDateKey)
+            let lastDateInterval : Int = userDefaults.integer(forKey: Settings.UsageUpdateDateKey)
             
-            let lastDateMonth = MonthOfDate(NSDate(timeIntervalSince1970: NSTimeInterval(lastDateInterval)))
-            let todaysMonth = MonthOfDate(NSDate())
+            let lastDateMonth = MonthOfDate(date: NSDate(timeIntervalSince1970: TimeInterval(lastDateInterval)))
+            let todaysMonth = MonthOfDate(date: NSDate())
             
             if lastDateMonth == todaysMonth {
-                shotsCounter = userDefaults.integerForKey(Settings.ShotsCounterKey)
+                shotsCounter = userDefaults.integer(forKey: Settings.ShotsCounterKey)
             }
         }
         
         shotsCounter += 1
         
-        userDefaults.setInteger(shotsCounter, forKey: Settings.ShotsCounterKey)
-        userDefaults.setInteger(Int(NSDate().timeIntervalSince1970), forKey: Settings.UsageUpdateDateKey)
+        userDefaults.set(shotsCounter, forKey: Settings.ShotsCounterKey)
+        userDefaults.set(Int(NSDate().timeIntervalSince1970), forKey: Settings.UsageUpdateDateKey)
     }
 }

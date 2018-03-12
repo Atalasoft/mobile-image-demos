@@ -3,7 +3,7 @@
 //  Mobile Capture Demo
 //
 //  Created by Michael Chernikov on 30/06/16.
-//  Copyright © 2016 Atalasoft, a Kofax Company. All rights reserved.
+//  Copyright © 2016-2018 Atalasoft, a Kofax Company. All rights reserved.
 //
 
 import UIKit
@@ -16,8 +16,8 @@ class LicenseAgreementCell: UITableViewCell {
     
     func makeLink(text: NSMutableAttributedString, linkText: String, linkUrl: String) {
         
-        let linkRange = (text.string as NSString).rangeOfString(linkText)
-        text.addAttribute(NSLinkAttributeName, value: linkUrl, range: linkRange)
+        let linkRange = (text.string as NSString).range(of: linkText)
+        text.addAttribute(NSAttributedStringKey.link, value: linkUrl, range: linkRange)
     }
     
     func setupLicenseData() {
@@ -30,58 +30,68 @@ class LicenseAgreementCell: UITableViewCell {
             addGestureRecognizer(linkTapGestureRecognizer)
         }
         
-        let path = NSBundle.mainBundle().pathForResource("eula", ofType: "rtf")
-        do {
-            let text = try String(contentsOfFile: path!, encoding: NSUTF8StringEncoding)
-            
-            let eula = try NSMutableAttributedString(data: text.dataUsingEncoding(NSUTF8StringEncoding)!, options: [NSDocumentTypeDocumentAttribute:NSRTFTextDocumentType], documentAttributes: nil)
-            
-            let paragraphStyle = NSMutableParagraphStyle()
-            paragraphStyle.alignment = NSTextAlignment.Justified
-            paragraphStyle.hyphenationFactor = 1
-            
-            eula.addAttribute(NSParagraphStyleAttributeName, value: paragraphStyle, range: NSMakeRange(0, eula.length))
-            makeLink(eula, linkText: "www.kofax.com", linkUrl: "http://www.kofax.com")
-            
-            license.attributedText = eula
-        } catch {
+        if let path = Bundle.main.url(forResource: "eula", withExtension: "rtf") {
+            do {
+                //let text = try String(contentsOfFile: path!, encoding: String.Encoding.utf8)
+                
+                //let eula = try NSMutableAttributedString(data: text.data(using: String.Encoding.utf8)!, options: [.documentType: NSAttributedString.DocumentType.rtf], documentAttributes: nil)
+                var eula : NSAttributedString
+                if #available(iOS 9.0, *) {
+                    eula = try NSAttributedString(url: path, options: [NSAttributedString.DocumentReadingOptionKey.documentType: NSAttributedString.DocumentType.rtf], documentAttributes: nil)
+                } else {
+                    // Fallback on earlier versions
+                    let text = try String(contentsOf: path, encoding: String.Encoding.utf8)
+                    eula = try NSAttributedString(data: text.data(using: String.Encoding.utf8)!, options: [NSAttributedString.DocumentReadingOptionKey.documentType: NSAttributedString.DocumentType.rtf], documentAttributes: nil)
+                }
+                
+                /*
+                let paragraphStyle = NSMutableParagraphStyle()
+                paragraphStyle.alignment = NSTextAlignment.justified
+                paragraphStyle.hyphenationFactor = 1
+                
+                eula.addAttribute(NSAttributedStringKey.paragraphStyle, value: paragraphStyle, range: NSMakeRange(0, eula.length))
+                makeLink(text: eula, linkText: "www.kofax.com", linkUrl: "http://www.kofax.com")
+                */
+                license.attributedText = eula
+            } catch {
+            }
         }
     }
 
-    func handleLinkTapGestureRecognizer(tapRecognizer: UITapGestureRecognizer) {
+    @objc func handleLinkTapGestureRecognizer(tapRecognizer: UITapGestureRecognizer) {
         
         let view = tapRecognizer.view
-        let location = tapRecognizer.locationInView(view)
+        let location = tapRecognizer.location(in: view)
         
         var linkStr = ""
         
-        if CGRectContainsPoint(license.frame, location) {
-            linkStr = getLinkOnText(tapRecognizer.locationInView(license), textView: license)
+        if license.frame.contains(location) {
+            linkStr = getLinkOnText(location: tapRecognizer.location(in: license), textView: license)
         }
         
         if !linkStr.isEmpty {
             let url: NSURL! = NSURL(string: linkStr)
-            UIApplication.sharedApplication().openURL(url)
+            UIApplication.shared.openURL(url as URL)
         }
     }
     
     func getLinkOnText(location: CGPoint, textView: UITextView) -> String {
         
-        var textPosition1 = textView.closestPositionToPoint(location)
+        var textPosition1 = textView.closestPosition(to: location)
         var textPosition2:UITextPosition?
         if let _ = textPosition1 {
-            textPosition2 = textView.positionFromPosition(textPosition1!, offset: 1)
+            textPosition2 = textView.position(from: textPosition1!, offset: 1)
             if let _ = textPosition2 {
-                textPosition1 = textView.positionFromPosition(textPosition1!, offset: -1)
-                textPosition2 = textView.positionFromPosition(textPosition1!, offset: 1)
+                textPosition1 = textView.position(from: textPosition1!, offset: -1)
+                textPosition2 = textView.position(from: textPosition1!, offset: 1)
             } else  {
                 return ""
             }
         }
         
-        let range = textView.textRangeFromPosition(textPosition1!, toPosition: textPosition2!)
-        let startOffset = textView.offsetFromPosition(textView.beginningOfDocument, toPosition: range!.start)
-        let endOffset = textView.offsetFromPosition(textView.beginningOfDocument, toPosition: range!.end)
+        let range = textView.textRange(from: textPosition1!, to: textPosition2!)
+        let startOffset = textView.offset(from: textView.beginningOfDocument, to: range!.start)
+        let endOffset = textView.offset(from:textView.beginningOfDocument, to: range!.end)
         let offsetRange = NSMakeRange(startOffset, endOffset - startOffset)
         if offsetRange.location == NSNotFound || offsetRange.length == 0 {
             return ""
@@ -91,11 +101,11 @@ class LicenseAgreementCell: UITableViewCell {
             return ""
         }
         
-        let attributedSubstring = textView.attributedText .attributedSubstringFromRange(offsetRange)
-        let link = attributedSubstring.attribute(NSLinkAttributeName, atIndex: 0, effectiveRange: nil)
+        let attributedSubstring = textView.attributedText.attributedSubstring(from: offsetRange)
+        let link = attributedSubstring.attribute(NSAttributedStringKey.link, at: 0, effectiveRange: nil)
         
         if let linkStr = link {
-            return linkStr.absoluteString
+            return ((linkStr as AnyObject).absoluteString as? String)!
         }
         
         return ""
