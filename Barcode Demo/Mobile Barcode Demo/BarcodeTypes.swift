@@ -3,7 +3,7 @@
 //  Mobile Barcode Demo
 //
 //  Created by Michael Chernikov on 27/05/16.
-//  Copyright © 2016 Atalasoft, a Kofax Company. All rights reserved.
+//  Copyright © 2016-2017 Atalasoft, a Kofax Company. All rights reserved.
 //
 
 import Foundation

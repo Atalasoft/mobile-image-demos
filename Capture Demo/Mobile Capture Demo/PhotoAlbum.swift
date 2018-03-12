@@ -3,7 +3,7 @@
 //  Mobile Capture Demo
 //
 //  Created by Michael Chernikov on 17/05/16.
-//  Copyright © 2016 Atalasoft, a Kofax Company. All rights reserved.
+//  Copyright © 2016-2017 Atalasoft. All rights reserved.
 //
 
 import Photos
@@ -21,11 +21,11 @@ class PhotoAlbum {
             
             PHPhotoLibrary.requestAuthorization { status in
                 switch status {
-                case .Authorized:
+                case .authorized:
                     break
-                case .Restricted:
+                case .restricted:
                     return
-                case .Denied:
+                case .denied:
                     return
                 default:
                     // place for .NotDetermined - in this callback status is already determined so should never get here
@@ -34,10 +34,10 @@ class PhotoAlbum {
             }
             let fetchOptions = PHFetchOptions()
             fetchOptions.predicate = NSPredicate(format: "title = %@", PhotoAlbum.albumName)
-            let collection = PHAssetCollection.fetchAssetCollectionsWithType(.Album, subtype: .Any, options: fetchOptions)
+            let collection = PHAssetCollection.fetchAssetCollections(with: .album, subtype: .any, options: fetchOptions)
             
             if let _: AnyObject = collection.firstObject {
-                return collection.firstObject as! PHAssetCollection
+                return collection.firstObject as PHAssetCollection!
             }
             
             return nil
@@ -48,8 +48,8 @@ class PhotoAlbum {
             return
         }
         
-        PHPhotoLibrary.sharedPhotoLibrary().performChanges({
-            PHAssetCollectionChangeRequest.creationRequestForAssetCollectionWithTitle(PhotoAlbum.albumName)
+        PHPhotoLibrary.shared().performChanges({
+            PHAssetCollectionChangeRequest.creationRequestForAssetCollection(withTitle: PhotoAlbum.albumName)
         }) { success, _ in
             if success {
                 self.assetCollection = fetchAssetCollectionForAlbum()
@@ -57,18 +57,18 @@ class PhotoAlbum {
         }
     }
     
-    func saveImage(image: UIImage, completionHandler: (result: Bool, error: NSError?) -> Void) {
+    func saveImage(image: UIImage, completionHandler: @escaping (_ result: Bool, _ error: NSError?) -> Void) {
         
         if assetCollection == nil {
             return   // If there was an error upstream, skip the save.
         }
         
-        PHPhotoLibrary.sharedPhotoLibrary().performChanges(
+        PHPhotoLibrary.shared().performChanges(
             {
-                let assetChangeRequest = PHAssetChangeRequest.creationRequestForAssetFromImage(image)
+                let assetChangeRequest = PHAssetChangeRequest.creationRequestForAsset(from: image)
                 let assetPlaceholder = assetChangeRequest.placeholderForCreatedAsset
-                let albumChangeRequest = PHAssetCollectionChangeRequest(forAssetCollection: self.assetCollection)
-                albumChangeRequest!.addAssets([assetPlaceholder!])
-            }, completionHandler: completionHandler)
+                let albumChangeRequest = PHAssetCollectionChangeRequest(for: self.assetCollection)
+                albumChangeRequest!.addAssets([assetPlaceholder!] as NSArray)
+        }, completionHandler: completionHandler as? (Bool, Error?) -> Void)
         }
 }

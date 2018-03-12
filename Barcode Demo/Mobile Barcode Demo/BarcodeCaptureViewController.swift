@@ -3,13 +3,13 @@
 //  Mobile Capture Demo
 //
 //  Created by Michael Chernikov on 15/04/16.
-//  Copyright © 2016 Atalasoft, a Kofax Company. All rights reserved.
+//  Copyright © 2016-2017 Atalasoft, a Kofax Company. All rights reserved.
 //
 
 import UIKit
 import Foundation
 
-class BarcodeInfo : AnyObject
+class BarcodeInfo
 {
     var barcode: kfxKEDBarcodeResult!
     var image: kfxKEDImage!
@@ -21,7 +21,7 @@ class BarcodeCaptureViewController: UIViewController, kfxKUIBarCodeCaptureContro
     @IBOutlet var cancelButton: UIButton!
     @IBOutlet var torchButton: UIButton!
     
-    let captureDevice = AVCaptureDevice.defaultDeviceWithMediaType(AVMediaTypeVideo)
+    let captureDevice = AVCaptureDevice.default(for: AVMediaType.video)
 
     var barcodeControlInitialized = false
     let settings : Settings = Settings()
@@ -40,15 +40,15 @@ class BarcodeCaptureViewController: UIViewController, kfxKUIBarCodeCaptureContro
         
         self.setNeedsStatusBarAppearanceUpdate()
         
-        torchButton.setImage(torchOffImage, forState: .Normal)
-        torchButton.hidden = !(captureDevice.hasFlash && captureDevice.hasTorch)
+        torchButton.setImage(torchOffImage, for: .normal)
+        torchButton.isHidden = !(captureDevice != nil && (captureDevice?.hasFlash)! && (captureDevice?.hasTorch)!)
         
-        let alertSound = NSURL(fileURLWithPath: NSBundle.mainBundle().pathForResource("beep-29", ofType: "wav")!)
+        let alertSound = NSURL(fileURLWithPath: Bundle.main.path(forResource: "beep-29", ofType: "wav")!)
         
         do {
             try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
             try AVAudioSession.sharedInstance().setActive(true)
-            try barcodeDetectedPlayer = AVAudioPlayer(contentsOfURL: alertSound)
+            try barcodeDetectedPlayer = AVAudioPlayer(contentsOf: alertSound as URL)
             barcodeDetectedPlayer?.prepareToPlay()
             
         } catch {
@@ -58,17 +58,17 @@ class BarcodeCaptureViewController: UIViewController, kfxKUIBarCodeCaptureContro
         
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         settings.load()
 
         navigationController?.setNavigationBarHidden(true, animated: true)
         
-        self.performSelector(#selector(initializeCaptureControl), withObject:nil, afterDelay: 0.25)
+        self.perform(#selector(initializeCaptureControl), with:nil, afterDelay: 0.25)
     }
 
-    override func viewDidDisappear(animated: Bool) {
+    override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         
         navigationController?.setNavigationBarHidden(false, animated:false)
@@ -78,32 +78,34 @@ class BarcodeCaptureViewController: UIViewController, kfxKUIBarCodeCaptureContro
         super.didReceiveMemoryWarning()
     }
     
-    override func prefersStatusBarHidden() -> Bool {
-        return true;
+    override var prefersStatusBarHidden: Bool {
+        return true
     }
     
-    func initializeCaptureControl() {
+    @objc func initializeCaptureControl() {
         
         if barcodeControlInitialized == false {
 
+            kfxKUILogging.enableConsoleLogging(true)
+            kfxKENLogging.enableConsoleLogging(true)
+            kfxKUTLogging.enableConsoleLogging(true)
             captureControlView.delegate = self;
             captureControlView.guidingLine = kfxKUIGuidingLineLandscape
         }
         
         var symbologies = [Int]()
-        for (index,value) in settings.barcodes.enumerate() {
+        for (index,value) in settings.barcodes.enumerated() {
             if value {
-                symbologies.append(index);
+                symbologies.append(index)
             }
         }
         
         captureControlView.symbologies = symbologies as [AnyObject]
-        
         captureControlView.readBarcode()
     }
     
     @IBAction func OnCancelButtonPressed() {
-        self.navigationController?.popViewControllerAnimated(true)
+        self.navigationController?.popViewController(animated: true)
     }
     
     func barcodeCaptureControl(barcodeCaptureControl: kfxKUIBarCodeCaptureControl!,
@@ -122,32 +124,31 @@ class BarcodeCaptureViewController: UIViewController, kfxKUIBarCodeCaptureContro
             player.play()
         }
         
-        dispatch_async(dispatch_get_main_queue(), {
-            
+        DispatchQueue.main.async {
             Settings.updateLimitationCounter()
             
-            self.performSegueWithIdentifier(BarcodeCaptureViewController.SeguePreviewImageViewController, sender: barcodeInfo)
-        })
+            self.performSegue(withIdentifier: BarcodeCaptureViewController.SeguePreviewImageViewController, sender: barcodeInfo)
+        }
     }
     
     @IBAction func OnTorchButtonPressed() {
-        if captureDevice.hasFlash && captureDevice.hasTorch {
+        if (captureDevice?.hasFlash)! && (captureDevice?.hasTorch)! {
             do {
-                try captureDevice.lockForConfiguration()
-                captureDevice.torchMode = captureDevice.torchMode == .Off ? .On : .Off
-                captureDevice.unlockForConfiguration()
+                try captureDevice?.lockForConfiguration()
+                captureDevice?.torchMode = captureDevice?.torchMode == .off ? .on : .off
+                captureDevice?.unlockForConfiguration()
             } catch {
                 print("Unable to turn on the torch")
             }
             
-            torchButton.setImage(captureDevice.torchMode == .On ? torchOnImage : torchOffImage, forState: .Normal)
+            torchButton.setImage(captureDevice?.torchMode == .on ? torchOnImage : torchOffImage, for: .normal)
         }
     }
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if (segue.identifier == BarcodeCaptureViewController.SeguePreviewImageViewController)
         {
-            let previewViewController: PreviewBarcodeViewController = segue.destinationViewController as! PreviewBarcodeViewController
+            let previewViewController: PreviewBarcodeViewController = segue.destination as! PreviewBarcodeViewController
             let barcodeInfo = sender as! BarcodeInfo
             
             previewViewController.barcodeInfo = barcodeInfo

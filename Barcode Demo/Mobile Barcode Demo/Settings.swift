@@ -3,7 +3,7 @@
 //  Mobile Capture Demo
 //
 //  Created by Michael Chernikov on 01/05/16.
-//  Copyright © 2016 Atalasoft, a Kofax Company. All rights reserved.
+//  Copyright © 2016-2017 Atalasoft, a Kofax Company. All rights reserved.
 //
 
 import Foundation
@@ -15,7 +15,7 @@ class Settings {
     static var ExceedLimitation = false
     
     // Barcode settings
-    var barcodes : [Bool] = [Bool](count: 11, repeatedValue: true)
+    var barcodes : [Bool] = [Bool](repeating: true, count: 11)
     
     static let BarcodeSettingsKey   = "Barcodes"
     
@@ -24,12 +24,12 @@ class Settings {
     
     func load() {
         
-        let userDefaults = NSUserDefaults.standardUserDefaults()
+        let userDefaults = UserDefaults.standard
 
-        let bc = userDefaults.arrayForKey(Settings.BarcodeSettingsKey)
+        let bc = userDefaults.array(forKey: Settings.BarcodeSettingsKey)
         if let configuredBarcodes = bc {
-            for (index,value) in configuredBarcodes.enumerate() {
-                if let enabled = value.boolValue {
+            for (index,value) in configuredBarcodes.enumerated() {
+                if let enabled = (value as AnyObject).boolValue {
                     barcodes[index] = enabled
                 }
             }
@@ -38,19 +38,19 @@ class Settings {
     
     func save() {
         
-        let userDefaults = NSUserDefaults.standardUserDefaults()
+        let userDefaults = UserDefaults.standard
         
-        userDefaults.setObject(barcodes, forKey: Settings.BarcodeSettingsKey)
+        userDefaults.set(barcodes, forKey: Settings.BarcodeSettingsKey)
         
         userDefaults.synchronize()
     }
 
     static func MonthOfDate(date: NSDate) -> Int {
         
-        let calendar = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)
-        let dateComponents = calendar?.components(NSCalendarUnit.Month, fromDate: date)
+        let calendar = NSCalendar(calendarIdentifier: NSCalendar.Identifier.gregorian)
+        let dateComponents = calendar?.components(NSCalendar.Unit.month, from: date as Date)
         if let components = dateComponents {
-            return components.month
+            return components.month!
         }
         return -1
     }
@@ -60,18 +60,18 @@ class Settings {
             return
         }
         
-        let userDefaults = NSUserDefaults.standardUserDefaults()
+        let userDefaults = UserDefaults.standard
         let keys = userDefaults.dictionaryRepresentation().keys
         
         var exceeded = false
         if keys.contains(Settings.ShotsCounterKey) && keys.contains(Settings.UsageUpdateDateKey) {
-            let lastDateInterval : Int = userDefaults.integerForKey(Settings.UsageUpdateDateKey)
+            let lastDateInterval : Int = userDefaults.integer(forKey: Settings.UsageUpdateDateKey)
             
-            let lastDateMonth = MonthOfDate(NSDate(timeIntervalSince1970: NSTimeInterval(lastDateInterval)))
-            let todaysMonth = MonthOfDate(NSDate())
+            let lastDateMonth = MonthOfDate(date: NSDate(timeIntervalSince1970: TimeInterval(lastDateInterval)))
+            let todaysMonth = MonthOfDate(date: NSDate())
             
             if lastDateMonth == todaysMonth {
-                let shotsCounter = userDefaults.integerForKey(Settings.ShotsCounterKey)
+                let shotsCounter = userDefaults.integer(forKey: Settings.ShotsCounterKey)
                 exceeded = shotsCounter >= Settings.MaxUsagesPerMonth
             }
         }
@@ -84,24 +84,24 @@ class Settings {
             return
         }
         
-        let userDefaults = NSUserDefaults.standardUserDefaults()
+        let userDefaults = UserDefaults.standard
         let keys = userDefaults.dictionaryRepresentation().keys
         var shotsCounter = 0
         
         if keys.contains(Settings.ShotsCounterKey) && keys.contains(Settings.UsageUpdateDateKey) {
-            let lastDateInterval : Int = userDefaults.integerForKey(Settings.UsageUpdateDateKey)
+            let lastDateInterval : Int = userDefaults.integer(forKey: Settings.UsageUpdateDateKey)
             
-            let lastDateMonth = MonthOfDate(NSDate(timeIntervalSince1970: NSTimeInterval(lastDateInterval)))
-            let todaysMonth = MonthOfDate(NSDate())
+            let lastDateMonth = MonthOfDate(date: NSDate(timeIntervalSince1970: TimeInterval(lastDateInterval)))
+            let todaysMonth = MonthOfDate(date: NSDate())
             
             if lastDateMonth == todaysMonth {
-                shotsCounter = userDefaults.integerForKey(Settings.ShotsCounterKey)
+                shotsCounter = userDefaults.integer(forKey: Settings.ShotsCounterKey)
             }
         }
         
         shotsCounter += 1
         
-        userDefaults.setInteger(shotsCounter, forKey: Settings.ShotsCounterKey)
-        userDefaults.setInteger(Int(NSDate().timeIntervalSince1970), forKey: Settings.UsageUpdateDateKey)
+        userDefaults.set(shotsCounter, forKey: Settings.ShotsCounterKey)
+        userDefaults.set(Int(NSDate().timeIntervalSince1970), forKey: Settings.UsageUpdateDateKey)
     }
 }

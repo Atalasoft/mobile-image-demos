@@ -3,7 +3,7 @@
 //  Mobile Barcode Demo
 //
 //  Created by Michael Chernikov on 27/05/16.
-//  Copyright © 2016 Atalasoft, a Kofax Company. All rights reserved.
+//  Copyright © 2016-2017 Atalasoft, a Kofax Company. All rights reserved.
 //
 
 import UIKit
@@ -22,20 +22,16 @@ class AboutViewController: UITableViewController {
         tableView.layoutIfNeeded()
     }
     
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 1
     }
-    
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
-    }
-    
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell: AboutCell! = tableView.dequeueReusableCellWithIdentifier(AboutViewController.cellIdentifier) as! AboutCell!
+
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell: AboutCell! = tableView.dequeueReusableCell(withIdentifier: AboutViewController.cellIdentifier) as! AboutCell!
         
         cell.setupAboutData()
         
-        cell.selectionStyle = .None
+        cell.selectionStyle = .none
         
         return cell
     }

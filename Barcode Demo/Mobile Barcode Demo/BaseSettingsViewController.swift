@@ -3,7 +3,7 @@
 //  Mobile Capture Demo
 //
 //  Created by Michael Chernikov on 19/05/16.
-//  Copyright © 2016 Atalasoft, a Kofax Company. All rights reserved.
+//  Copyright © 2016-2017 Atalasoft, a Kofax Company. All rights reserved.
 //
 
 import UIKit
@@ -15,13 +15,13 @@ class BaseSettingsViewController: UITableViewController {
     let CellsFontName = "HelveticaNeue"
     let CellsFontSize : CGFloat = 13
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         settings.load()
         
         super.viewWillAppear(animated)
     }
     
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         settings.save()
         
         super.viewWillDisappear(animated)
@@ -30,7 +30,7 @@ class BaseSettingsViewController: UITableViewController {
     
     func createSwitchWithTag(tag: Int, value: AnyObject) -> UISwitch{
         let newSwitch = UISwitch()
-        newSwitch.on = value.boolValue
+        newSwitch.isOn = value.boolValue
         newSwitch.tag = tag
         return newSwitch
     }
@@ -39,12 +39,12 @@ class BaseSettingsViewController: UITableViewController {
         let textField = UITextField()
         textField.tag = tag
         textField.font = UIFont(name: CellsFontName, size: CellsFontSize)
-        textField.borderStyle = .None
-        textField.autocorrectionType = .No
-        textField.returnKeyType = .Done
+        textField.borderStyle = .none
+        textField.autocorrectionType = .no
+        textField.returnKeyType = .done
         textField.placeholder = placeholder
-        textField.textAlignment = .Right
-        textField.clearButtonMode = .WhileEditing
+        textField.textAlignment = .right
+        textField.clearButtonMode = .whileEditing
         textField.text = text
         textField.frame = frame
         return textField
@@ -52,8 +52,8 @@ class BaseSettingsViewController: UITableViewController {
     
     func createSegmentedControlWithTag(tag: Int, items: NSArray, selectedSegment: NSInteger) -> UISegmentedControl{
         let segmentControl = UISegmentedControl(items: items as [AnyObject])
-        let dict : Dictionary<String, UIFont> = [NSFontAttributeName : UIFont(name: CellsFontName, size:15.0)!]
-        segmentControl.setTitleTextAttributes(dict, forState: .Normal)
+        let dict : Dictionary<String, UIFont> = [NSAttributedStringKey.font.rawValue : UIFont(name: CellsFontName, size:15.0)!]
+        segmentControl.setTitleTextAttributes(dict, for: .normal)
         segmentControl.selectedSegmentIndex = selectedSegment;
         segmentControl.tag = tag;
         return segmentControl;

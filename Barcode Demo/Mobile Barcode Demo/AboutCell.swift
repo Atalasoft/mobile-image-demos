@@ -3,7 +3,7 @@
 //  Mobile Capture Demo
 //
 //  Created by Michael Chernikov on 23/06/16.
-//  Copyright © 2016 Atalasoft, a Kofax Company. All rights reserved.
+//  Copyright © 2016-2017 Atalasoft, a Kofax Company. All rights reserved.
 //
 
 import UIKit
@@ -20,8 +20,8 @@ class AboutCell: UITableViewCell {
     
     func makeLink(text: NSMutableAttributedString, linkText: String, linkUrl: String) {
         
-        let linkRange = (text.string as NSString).rangeOfString(linkText)
-        text.addAttribute(NSLinkAttributeName, value: linkUrl, range: linkRange)
+        let linkRange = (text.string as NSString).range(of: linkText)
+        text.addAttribute(NSAttributedStringKey.link, value: linkUrl, range: linkRange)
     }
     
     func setupAboutData() {
@@ -34,7 +34,7 @@ class AboutCell: UITableViewCell {
             addGestureRecognizer(linkTapGestureRecognizer)
         }
         
-        let appVersion = NSBundle.mainBundle().infoDictionary!["CFBundleShortVersionString"];
+        let appVersion = Bundle.main.infoDictionary!["CFBundleShortVersionString"];
         if let ver = appVersion {
             versionLabel.text = "Version \(ver)"
         }
@@ -42,66 +42,66 @@ class AboutCell: UITableViewCell {
         appNameLabel.text = "Atalasoft MobileImage Barcode SDK app"
         
         let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.alignment = NSTextAlignment.Justified
+        paragraphStyle.alignment = NSTextAlignment.justified
         
         let text1 = NSMutableAttributedString(string: "This app is for app developers to see what they can build with the Atalasoft MobileImage barcode SDK for iOS/Xcode. The technology can recognize one or many barcodes on the screen. This app is not for consumers looking to check store prices.", attributes: [
-            NSParagraphStyleAttributeName: paragraphStyle,
-            NSBaselineOffsetAttributeName: NSNumber(float: 0)
+            NSAttributedStringKey.paragraphStyle: paragraphStyle,
+            NSAttributedStringKey.baselineOffset: NSNumber(value: 0)
             ])
         text1Label.attributedText = text1;
         
         let text2 = NSMutableAttributedString(string: "To build your own document capture, processing, or viewing app - visit Atalasoft and grab a 30-day evaluation copy for yourself. We'll provide the tools and the support you need to get started!", attributes: [
-                NSParagraphStyleAttributeName: paragraphStyle,
-                NSBaselineOffsetAttributeName: NSNumber(float: 0)
+            NSAttributedStringKey.paragraphStyle: paragraphStyle,
+                NSAttributedStringKey.baselineOffset: NSNumber(value: 0)
             ])
             
-        makeLink(text2, linkText: "Atalasoft", linkUrl: "http://hubs.ly/H03pzS80")
+        makeLink(text: text2, linkText: "Atalasoft", linkUrl: "http://hubs.ly/H03pzS80")
         text2Label.attributedText = text2
         
         
         let email = NSMutableAttributedString(string: "sales@atalasoft.com")
         let emailUrl = "sales@atalasoft.com"
         
-        makeLink(email, linkText: emailUrl, linkUrl: "mailto:sales@atalasoft.com")
+        makeLink(text: email, linkText: emailUrl, linkUrl: "mailto:sales@atalasoft.com")
         emailLabel.attributedText = email
     }
     
-    func handleLinkTapGestureRecognizer(tapRecognizer: UITapGestureRecognizer) {
+    @objc func handleLinkTapGestureRecognizer(tapRecognizer: UITapGestureRecognizer) {
         
         let view = tapRecognizer.view
-        let location = tapRecognizer.locationInView(view)
+        let location = tapRecognizer.location(in: view)
         
         var linkStr = ""
         
-        if CGRectContainsPoint(text2Label.frame, location) {
-            linkStr = getLinkOnText(tapRecognizer.locationInView(text2Label), textView: text2Label)
-        } else if CGRectContainsPoint(emailLabel.frame, location) {
-            linkStr = getLinkOnText(tapRecognizer.locationInView(emailLabel), textView: emailLabel)
+        if text2Label.frame.contains(location) {
+            linkStr = getLinkOnText(location: tapRecognizer.location(in: text2Label), textView: text2Label)
+        } else if emailLabel.frame.contains(location) {
+            linkStr = getLinkOnText(location: tapRecognizer.location(in: emailLabel), textView: emailLabel)
         }
         
         if !linkStr.isEmpty {
             let url: NSURL! = NSURL(string: linkStr)
-            UIApplication.sharedApplication().openURL(url)
+            UIApplication.shared.openURL(url as URL)
         }
     }
     
     func getLinkOnText(location: CGPoint, textView: UITextView) -> String {
 
-        var textPosition1 = textView.closestPositionToPoint(location)
+        var textPosition1 = textView.closestPosition(to: location)
         var textPosition2:UITextPosition?
         if let _ = textPosition1 {
-            textPosition2 = textView.positionFromPosition(textPosition1!, offset: 1)
+            textPosition2 = textView.position(from: textPosition1!, offset: 1)
             if let _ = textPosition2 {
-                textPosition1 = textView.positionFromPosition(textPosition1!, offset: -1)
-                textPosition2 = textView.positionFromPosition(textPosition1!, offset: 1)
+                textPosition1 = textView.position(from: textPosition1!, offset: -1)
+                textPosition2 = textView.position(from: textPosition1!, offset: 1)
             } else  {
                 return ""
             }
         }
         
-        let range = textView.textRangeFromPosition(textPosition1!, toPosition: textPosition2!)
-        let startOffset = textView.offsetFromPosition(textView.beginningOfDocument, toPosition: range!.start)
-        let endOffset = textView.offsetFromPosition(textView.beginningOfDocument, toPosition: range!.end)
+        let range = textView.textRange(from: textPosition1!, to: textPosition2!)
+        let startOffset = textView.offset(from: textView.beginningOfDocument, to: range!.start)
+        let endOffset = textView.offset(from: textView.beginningOfDocument, to: range!.end)
         let offsetRange = NSMakeRange(startOffset, endOffset - startOffset)
         if offsetRange.location == NSNotFound || offsetRange.length == 0 {
             return ""
@@ -111,8 +111,8 @@ class AboutCell: UITableViewCell {
             return ""
         }
         
-        let attributedSubstring = textView.attributedText .attributedSubstringFromRange(offsetRange)
-        let link = attributedSubstring.attribute(NSLinkAttributeName, atIndex: 0, effectiveRange: nil)
+        let attributedSubstring = textView.attributedText .attributedSubstring(from: offsetRange)
+        let link = attributedSubstring.attribute(NSAttributedStringKey.link, at: 0, effectiveRange: nil)
         
         if let linkStr = link {
             return linkStr as! String
