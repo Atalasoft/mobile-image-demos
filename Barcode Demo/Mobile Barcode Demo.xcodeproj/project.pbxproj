@@ -505,8 +505,8 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = 67539GYMXD;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				DEVELOPMENT_TEAM = B9C7GRQCYQ;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -517,10 +517,10 @@
 				INFOPLIST_FILE = "Mobile Barcode Demo/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.Michael-Chernikov.TestApp2";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.kofax.Mobile-Barcode-Demo";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "145438e3-93b6-4526-992e-e1b015de5147";
-				PROVISIONING_PROFILE_SPECIFIER = "TestApp 2 Dev Profile";
+				PROVISIONING_PROFILE = "375352da-dbad-4b15-82e6-8aecb429388a";
+				PROVISIONING_PROFILE_SPECIFIER = "Atalasoft MobileImage Barcode App Store";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/Mobile-Barcode-Demo-Bridging-Header.h";
 				SWIFT_VERSION = 4.0;
 			};
@@ -533,7 +533,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
-				DEVELOPMENT_TEAM = 67539GYMXD;
+				DEVELOPMENT_TEAM = B9C7GRQCYQ;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -544,10 +544,10 @@
 				INFOPLIST_FILE = "Mobile Barcode Demo/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.Michael-Chernikov.TestApp2";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.kofax.Mobile-Barcode-Demo";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "79c15082-e878-4342-be76-d62fffc0bfa1";
-				PROVISIONING_PROFILE_SPECIFIER = "Test App 2 Distribution Profile";
+				PROVISIONING_PROFILE = "375352da-dbad-4b15-82e6-8aecb429388a";
+				PROVISIONING_PROFILE_SPECIFIER = "Atalasoft MobileImage Barcode App Store";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/Mobile-Barcode-Demo-Bridging-Header.h";
 				SWIFT_VERSION = 4.0;
 			};
