@@ -108,8 +108,7 @@ class BarcodeCaptureViewController: UIViewController, kfxKUIBarCodeCaptureContro
         self.navigationController?.popViewController(animated: true)
     }
     
-    func barcodeCaptureControl(barcodeCaptureControl: kfxKUIBarCodeCaptureControl!,
-                               barcodeFound result : kfxKEDBarcodeResult, image:kfxKEDImage)
+    func barcodeCaptureControl(_ barcodeCaptureControl: kfxKUIBarCodeCaptureControl!, barcodeFound result: kfxKEDBarcodeResult!, image: kfxKEDImage!)
     {
         let barcodeInfo = BarcodeInfo()
         barcodeInfo.barcode = result
