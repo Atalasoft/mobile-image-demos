@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:enabled="true"
+        android:title="@string/pref_header_camera_pref">
+
+    <SwitchPreference
+        android:key="pref_key_show_gallery"
+        android:defaultValue="true"
+        android:title="@string/pref_title_show_gallery" />
+
+    <EditTextPreference
+        android:defaultValue="0"
+        android:key="pref_key_device_declination_pitch"
+        android:summary="0°"
+        android:title="@string/pref_title_device_declination_pitch" />
+
+    <EditTextPreference
+        android:key="pref_key_device_declination_roll"
+        android:defaultValue="0"
+        android:summary="0°"
+        android:title="@string/pref_title_device_declination_roll" />
+
+    <EditTextPreference
+        android:key="pref_key_manual_capture_time"
+        android:defaultValue="10"
+        android:summary="10 sec"
+        android:title="@string/pref_title_manual_capture_time" />
+    </PreferenceCategory>
+</PreferenceScreen>

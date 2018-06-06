@@ -1,0 +1,80 @@
+<resources>
+    <string name="app_name">MobileImage SDK Capture Sample</string>
+    <string name="permissions_rationale">MobileImage SDK Capture Sample needs camera permission.</string>
+    <string name="save_permissions_msg">For this action MobileImage SDK Capture Sample needs to save file.</string>
+    <string name="cannot_save_file_msg">File cannot be saved and therefore be attached to the email.</string>
+    <string name="monthly_limit_exceeded_msg">MobileImage SDK Capture Sample monthly usage limit (%d) is exceeded.</string>
+
+    <string name="camera_unavailable">Camera Unavailable</string>
+
+    <string name="menu_option_settings_title">Settings</string>
+    <string name="menu_option_about_title">About</string>
+    <string name="menu_option_lic_agreement_title">License Agreement</string>
+
+    <string name="pref_header_camera_pref">Camera settings</string>
+    <string name="pref_header_image_processor">Image processor settings</string>
+    <string name="pref_header_about">About</string>
+    <string name="pref_header_license">License Agreement</string>
+
+    <string name="title_activity_settings">Capture Settings</string>
+
+    <string name="pref_title_show_gallery">Show Gallery:</string>
+    <string name="pref_title_device_declination_pitch">Device Declination Pitch (-180° - 180°)</string>
+    <string name="pref_title_device_declination_roll">Device Declination Roll (-180° - 180°)</string>
+    <string name="pref_title_manual_capture_time">Manual Capture Time</string>
+
+    <string name="pref_header_image_processor_basic">Basic</string>
+
+    <string name="pref_title_deskew_type_basic_mode">Deskew Type</string>
+    <string-array name="pref_list_deskew_type_basic_mode">
+        <item>None</item>
+        <item>By document edges</item>
+        <item>By document content</item>
+    </string-array>
+    <string-array name="pref_list_deskew_type_basic_mode_values">
+        <item>None</item>
+        <item>ByDocumentEdges</item>
+        <item>ByDocumentContent</item>
+    </string-array>
+
+    <string name="pref_title_image_processing_basic_mode">Mode</string>
+    <string-array name="pref_list_image_processing_basic_mode">
+        <item>BW</item>
+        <item>Gray</item>
+        <item>Color</item>
+    </string-array>
+    <string-array name="pref_list_image_processing_basic_mode_values">
+        <item>BW</item>
+        <item>Gray</item>
+        <item>Color</item>
+    </string-array>
+
+    <string name="pref_title_image_processing_auto_crop">Auto Crop</string>
+    <string name="pref_title_image_processing_auto_rotate">Auto Rotate</string>
+    <string name="pref_title_image_processing_deskew">Deskew</string>
+
+    <string name="pref_header_image_processor_advanced">Advanced</string>
+
+    <string name="pref_title_image_processing_scale">Scale (dpi)</string>
+    <string-array name="pref_list_image_processing_scale">
+        <item>Auto</item>
+        <item>200</item>
+        <item>300</item>
+        <item>400</item>
+    </string-array>
+    <string-array name="pref_list_image_processing_scale_values">
+        <item>Auto</item>
+        <item>200</item>
+        <item>300</item>
+        <item>400</item>
+    </string-array>
+
+    <string name="title_activity_capture">CaptureActivity</string>
+    <string name="title_activity_preview">PreviewActivity</string>
+    <string name="title_activity_process_image">ProcessImageActivity</string>
+    <string name="title_activity_about">AboutActivity</string>
+
+    <string name="title_activity_license_agreement">LicenseAgreementActivity</string>
+
+
+</resources>

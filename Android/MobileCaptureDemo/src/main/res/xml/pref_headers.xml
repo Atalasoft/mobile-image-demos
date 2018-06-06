@@ -1,0 +1,8 @@
+<preference-headers xmlns:android="http://schemas.android.com/apk/res/android">
+    <header
+        android:fragment="com.kofax.samples.mobilecapturedemo.SettingsActivity$CameraPreferenceFragment"
+        android:title="@string/pref_header_camera_pref" />
+    <header
+        android:fragment="com.kofax.samples.mobilecapturedemo.SettingsActivity$ImageProcessorPreferenceFragment"
+        android:title="@string/pref_header_image_processor" />
+</preference-headers>
