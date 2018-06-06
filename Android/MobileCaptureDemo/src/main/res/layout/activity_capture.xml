@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.kofax.samples.mobilecapturedemo.CaptureActivity">
+
+    <include layout="@layout/content_capture" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_gallery"
+        android:layout_width="@dimen/fab_size_small"
+        android:layout_height="@dimen/fab_size_small"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_margin"
+        app:srcCompat="@android:drawable/ic_menu_gallery" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_force_capture"
+        android:layout_width="@dimen/fab_size"
+        android:layout_height="@dimen/fab_size"
+        android:layout_gravity="bottom|center"
+        android:layout_margin="@dimen/fab_margin"
+        app:srcCompat="@android:drawable/ic_menu_camera" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_torch"
+        android:layout_width="@dimen/fab_size_small"
+        android:layout_height="@dimen/fab_size_small"
+        android:layout_gravity="top|end"
+        android:layout_margin="@dimen/fab_margin"
+        android:visibility="gone"
+        app:srcCompat="@drawable/torch_button" />
+
+</android.support.design.widget.CoordinatorLayout>
