@@ -12,18 +12,24 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
+import android.text.method.ScrollingMovementMethod;
+import android.util.Base64;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.kofax.kmc.ken.engines.data.BarCodeDataFormat;
 import com.kofax.kmc.kui.uicontrols.ImgReviewEditCntrl;
 import com.kofax.kmc.kut.utilities.error.KmcException;
+
+import java.nio.charset.StandardCharsets;
 
 public class BarcodeInfoActivity extends AppCompatActivity {
     private LinearLayout mLayoutPortrait;
     private LinearLayout mLayoutLandscape;
 
     private String mBarcodeInfoStrHtml;
+    private String mBarcodeValue;
 
     private long mLastClickTime = 0;
 
@@ -43,10 +49,15 @@ public class BarcodeInfoActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         TextView barcodeInfoValueViewPortrait = (TextView) findViewById(R.id.barcode_info_portrait);
-        ImgReviewEditCntrl imgReviewEditCntrlPortrait = (ImgReviewEditCntrl) findViewById(R.id.view_review_portrait);
+        barcodeInfoValueViewPortrait.setVerticalScrollBarEnabled(true);
+        barcodeInfoValueViewPortrait.setMovementMethod(new ScrollingMovementMethod());
 
         TextView barcodeInfoValueViewLandscape = (TextView) findViewById(R.id.barcode_info_landscape);
+        barcodeInfoValueViewLandscape.setVerticalScrollBarEnabled(true);
+        barcodeInfoValueViewLandscape.setMovementMethod(new ScrollingMovementMethod());
+
         ImgReviewEditCntrl imgReviewEditCntrlLandscape = (ImgReviewEditCntrl) findViewById(R.id.view_review_landscape);
+        ImgReviewEditCntrl imgReviewEditCntrlPortrait = (ImgReviewEditCntrl) findViewById(R.id.view_review_portrait);
 
         try {
             imgReviewEditCntrlPortrait.setImage( Constants.BARCODE_EVENT.getImage() );
@@ -74,11 +85,21 @@ public class BarcodeInfoActivity extends AppCompatActivity {
             finish();
         }
 
-        mBarcodeInfoStrHtml = String.format("<h3><strong>Type</strong>:</h3> %s<hr /><h3><strong>Value</strong>:</h3> %s",
-                Constants.BARCODE_EVENT.getBarCode().getType().toString(), Constants.BARCODE_EVENT.getBarCode().getValue());
+        mBarcodeValue = Constants.BARCODE_EVENT.getBarCode().getValue();
+        if (Constants.BARCODE_EVENT.getBarCode().getDataFormat() == BarCodeDataFormat.BASE_64){
+            try {
+                byte[] data = Base64.decode(mBarcodeValue, Base64.DEFAULT);
+                mBarcodeValue = new String(data, StandardCharsets.UTF_8);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
 
-        barcodeInfoValueViewPortrait.setText(Html.fromHtml(mBarcodeInfoStrHtml));
-        barcodeInfoValueViewLandscape.setText(Html.fromHtml(mBarcodeInfoStrHtml));
+        mBarcodeInfoStrHtml = String.format("<h3><strong>Type</strong>:</h3> %s<hr /><h3><strong>Value</strong>:</h3>",
+                Constants.BARCODE_EVENT.getBarCode().getType().toString());
+
+        barcodeInfoValueViewPortrait.setText(Html.fromHtml(mBarcodeInfoStrHtml) + mBarcodeValue);
+        barcodeInfoValueViewLandscape.setText(Html.fromHtml(mBarcodeInfoStrHtml) + mBarcodeValue);
 
         mLayoutPortrait = (LinearLayout) findViewById(R.id.barcode_info_portrait_layout);
         mLayoutPortrait.setVisibility(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT ? View.VISIBLE : View.GONE);
@@ -110,7 +131,7 @@ public class BarcodeInfoActivity extends AppCompatActivity {
                 emailIntent.setData(Uri.parse("mailto:"));
                 emailIntent.setType("text/plain");
                 emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Barcode info");
-                emailIntent.putExtra(Intent.EXTRA_TEXT, "Here is the result of MobileImage SDK Barcode sample:\n " + Html.fromHtml(mBarcodeInfoStrHtml));
+                emailIntent.putExtra(Intent.EXTRA_TEXT, "Here is the result of MobileImage SDK Barcode sample:\n " + Html.fromHtml(mBarcodeInfoStrHtml) + mBarcodeValue);
 
                 try {
                     startActivityForResult(Intent.createChooser(emailIntent, "Send mail..."), Constants.SEND_EMAIL_REQUEST_ID);
