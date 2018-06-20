@@ -7,7 +7,7 @@ android {
         applicationId "com.kofax.samples.mobilebarcodedemo"
         minSdkVersion 23
         targetSdkVersion 26
-        versionCode 2
+        versionCode 3
         versionName "1.0"
 
         ndk {
