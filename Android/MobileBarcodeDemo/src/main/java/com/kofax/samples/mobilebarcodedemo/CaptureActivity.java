@@ -26,13 +26,10 @@ import com.kofax.kmc.kui.uicontrols.data.Flash;
 import com.kofax.kmc.kui.uicontrols.data.GuidingLine;
 import com.kofax.kmc.kui.uicontrols.data.Symbology;
 import com.kofax.kmc.kut.utilities.AppContextProvider;
-import com.kofax.kmc.kut.utilities.Licensing;
 import com.kofax.samples.common.PermissionsManager;
 
 import java.util.ArrayList;
 import java.util.Date;
-
-import com.kofax.samples.common.License;
 
 public class CaptureActivity extends AppCompatActivity
         implements ActivityCompat.OnRequestPermissionsResultCallback, CameraInitializationListener, BarCodeFoundListener, /*ImageCapturedListener,*/ CameraInitializationFailedListener {
@@ -53,7 +50,7 @@ public class CaptureActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
 
         AppContextProvider.setContext(getApplicationContext());
-        Licensing.setMobileSDKLicense(License.PROCESS_PAGE_SDK_LICENSE);
+        //Licensing.setMobileSDKLicense(License.PROCESS_PAGE_SDK_LICENSE);
 
         if (mPermissionsManager.isGranted(PERMISSIONS)) {
             setUp();
@@ -205,7 +202,7 @@ public class CaptureActivity extends AppCompatActivity
 
         switch (requestCode) {
             case Constants.BARCODE_FOUND_REQUEST_ID:
-                if (resultCode == RESULT_OK || resultCode == Constants.PROCESSED_IMAGE_EMAIL_IS_SENT_RESPONSE_ID) {
+                if (resultCode == RESULT_OK || resultCode == Constants.PROCESSED_IMAGE_MENU_HOME_ID) {
                     finish();
                 }
                 if (resultCode == RESULT_OK || resultCode == Constants.PROCESSED_IMAGE_RETAKE_RESPONSE_ID) {

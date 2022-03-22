@@ -1,7 +1,6 @@
 package com.kofax.samples.mobilebarcodedemo;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
@@ -14,6 +13,8 @@ import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Base64;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -134,14 +135,20 @@ public class BarcodeInfoActivity extends AppCompatActivity {
                 emailIntent.putExtra(Intent.EXTRA_TEXT, "Here is the result of MobileImage SDK Barcode sample:\n " + Html.fromHtml(mBarcodeInfoStrHtml) + mBarcodeValue);
 
                 try {
-                    startActivityForResult(Intent.createChooser(emailIntent, "Send mail..."), Constants.SEND_EMAIL_REQUEST_ID);
+                    startActivityForResult(Intent.createChooser(emailIntent, "Share"), Constants.SEND_EMAIL_REQUEST_ID);
                 } catch (android.content.ActivityNotFoundException ex) {
-                    Snackbar.make(view, "Error in email sending", Snackbar.LENGTH_LONG)
+                    Snackbar.make(view, "Error in sharing", Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
                 }
             }
 
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.toolbar_barcode_info, menu);
+        return true;
     }
 
     @Override
@@ -152,33 +159,12 @@ public class BarcodeInfoActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode) {
-            case Constants.SEND_EMAIL_REQUEST_ID:
-                if (resultCode == RESULT_OK) {
-                    new AlertDialog.Builder(this)
-                            .setTitle("Info")
-                            .setMessage( "Email is sent" )
-                            .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    setResult(Constants.PROCESSED_IMAGE_EMAIL_IS_SENT_RESPONSE_ID);
-                                    finish();
-                                }
-                            })
-                            .setCancelable(true)
-                            .setIcon(R.drawable.ic_info_black_24dp)
-                            .show();
-                } else {
-                    new AlertDialog.Builder(this)
-                            .setTitle("Error")
-                            .setMessage( "Email is not sent" )
-                            .setPositiveButton(android.R.string.ok, null)
-                            .setCancelable(false)
-                            .setIcon(R.drawable.error)
-                            .show();
-                }
-                break;
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.menu_home) {
+            setResult(Constants.PROCESSED_IMAGE_MENU_HOME_ID);
+            finish();
         }
+        return super.onOptionsItemSelected(item);
     }
 }

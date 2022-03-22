@@ -33,5 +33,7 @@
     <string name="menu_option_lic_agreement_title">License Agreement</string>
 
     <string name="monthly_limit_exceeded_msg">MobileImage SDK Barcode Sample monthly usage limit (%d) is exceeded.</string>
-
+    <string name="license_expired_error_msg">License is expired.</string>
+    <string name="license_invalid_error_msg">License is invalid.</string>
+     
 </resources>

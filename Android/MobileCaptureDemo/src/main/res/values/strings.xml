@@ -4,6 +4,8 @@
     <string name="save_permissions_msg">For this action MobileImage SDK Capture Sample needs to save file.</string>
     <string name="cannot_save_file_msg">File cannot be saved and therefore be attached to the email.</string>
     <string name="monthly_limit_exceeded_msg">MobileImage SDK Capture Sample monthly usage limit (%d) is exceeded.</string>
+    <string name="license_expired_error_msg">License is expired.</string>
+    <string name="license_invalid_error_msg">License is invalid.</string>
 
     <string name="camera_unavailable">Camera Unavailable</string>
 

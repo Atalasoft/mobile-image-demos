@@ -7,6 +7,7 @@ import android.preference.PreferenceScreen;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Base64;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebView;
@@ -51,19 +52,21 @@ public class AboutActivity extends AppCompatActivity {
                 "<p>To build your own document capture, processing, or viewing app - visit Atalasoft and grab a 30-day evaluation copy for yourself. We'll provide the tools and the support you need to get started!</p>\n" +
                 "<h3 style=\"color: #2e6c80;\">About information:</h3>\n" +
                 "<ol style=\"list-style: none; font-size: 14px; line-height: 32px; font-weight: bold;\">\n" +
-                "<li style=\"clear: both;\">MobileImage – document capture SDK from Atalasoft.</li>\n" +
+                "<li style=\"clear: both;\">MobileImage - document capture SDK from Atalasoft.</li>\n" +
                 "<li style=\"clear: both;\">Version: " + Constants.VERSION + "</li>\n" +
                 "<li style=\"clear: both;\"><a href=\"mailto:sales@atalasoft.com\">sales@atalasoft.com</a></li>\n" +
                 "<li style=\"clear: both;\"><a title=\"Atalasoft\" href=\"http://hubs.ly/H03pzS80\">Atalasoft</a></li>\n" +
+                "<li style=\"clear: both;\"><a title=\"Online Privacy Policy Kofax\" href=\"https://www.kofax.com/legal/privacy\">Online Privacy Policy Kofax</a></li>\n" +
                 "</ol>\n" +
                 "</FONT></P>\n" +
                 "</BODY>\n" + "</HTML>";
 
         WebView aboutWebViewPortrait  = (WebView) findViewById(R.id.about_text_portrait);
-        aboutWebViewPortrait.loadData(aboutStr, "text/html; charset=utf-8", "UTF-8" );
+        String encodedAboutStr = Base64.encodeToString(aboutStr.getBytes(), Base64.NO_PADDING);
+        aboutWebViewPortrait.loadData(encodedAboutStr, "text/html; charset=utf-8", "base64");
 
         WebView aboutWebViewLandscape = (WebView) findViewById(R.id.about_text_landscape);
-        aboutWebViewLandscape.loadData(aboutStr, "text/html; charset=utf-8", "UTF-8" );
+        aboutWebViewLandscape.loadData(encodedAboutStr, "text/html; charset=utf-8", "base64");
 
         mLayoutPortrait = (LinearLayout) findViewById(R.id.about_portrait_layout);
         mLayoutPortrait.setVisibility(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT ? View.VISIBLE : View.GONE);

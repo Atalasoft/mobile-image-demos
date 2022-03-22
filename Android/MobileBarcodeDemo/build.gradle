@@ -1,14 +1,16 @@
 apply plugin: 'com.android.application'
 
+def vcode = (int)(((new Date().getTime()/1000) - 1645454402) / 30)
+
 android {
-    compileSdkVersion 26
+    compileSdkVersion 30
 
     defaultConfig {
         applicationId "com.kofax.samples.mobilebarcodedemo"
         minSdkVersion 23
-        targetSdkVersion 26
-        versionCode 3
-        versionName "1.2"
+        targetSdkVersion 30
+        versionCode vcode
+        versionName "1.2.1"
 
         ndk {
             abiFilters "armeabi-v7a", "x86", "x86_64", "armeabi", "arm64-v8a"
@@ -28,7 +30,6 @@ android {
         }
     }
 }
-
 
 dependencies {
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'

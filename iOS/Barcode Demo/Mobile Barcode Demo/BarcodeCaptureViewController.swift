@@ -23,7 +23,6 @@ class BarcodeCaptureViewController: UIViewController, kfxKUIBarCodeCaptureContro
     
     let captureDevice = AVCaptureDevice.default(for: AVMediaType.video)
 
-    var barcodeControlInitialized = false
     let settings : Settings = Settings()
     
     var barcodeDetectedPlayer: AVAudioPlayer?
@@ -40,6 +39,10 @@ class BarcodeCaptureViewController: UIViewController, kfxKUIBarCodeCaptureContro
         
         self.setNeedsStatusBarAppearanceUpdate()
         
+        kfxKUIBarCodeCaptureControl.initializeControl()
+        captureControlView.delegate = self;
+        captureControlView.guidingLine = kfxKUIGuidingLineLandscape
+
         torchButton.setImage(torchOffImage, for: .normal)
         torchButton.isHidden = !(captureDevice != nil && (captureDevice?.hasFlash)! && (captureDevice?.hasTorch)!)
         
@@ -83,15 +86,6 @@ class BarcodeCaptureViewController: UIViewController, kfxKUIBarCodeCaptureContro
     }
     
     @objc func initializeCaptureControl() {
-        
-        if barcodeControlInitialized == false {
-
-            kfxKUILogging.enableConsoleLogging(true)
-            kfxKENLogging.enableConsoleLogging(true)
-            kfxKUTLogging.enableConsoleLogging(true)
-            captureControlView.delegate = self;
-            captureControlView.guidingLine = kfxKUIGuidingLineLandscape
-        }
         
         var symbologies = [Int]()
         for (index,value) in settings.barcodes.enumerated() {

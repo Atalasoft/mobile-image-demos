@@ -3,6 +3,7 @@ package com.kofax.samples.mobilebarcodedemo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Base64;
 import android.view.MenuItem;
 import android.webkit.WebView;
 
@@ -108,7 +109,8 @@ public class LicenseAgreementActivity extends AppCompatActivity {
                 "Atalasoft to be liable to another.</FONT></P>\n" +
                 "</BODY>\n" +
                 "</HTML>";
-        licAgreementTextView.loadData(str, "text/html; charset=utf-8", "UTF-8" );
+        String encodedStr = Base64.encodeToString(str.getBytes(), Base64.NO_PADDING);
+        licAgreementTextView.loadData(encodedStr, "text/html; charset=utf-8", "base64");
     }
 
     @Override

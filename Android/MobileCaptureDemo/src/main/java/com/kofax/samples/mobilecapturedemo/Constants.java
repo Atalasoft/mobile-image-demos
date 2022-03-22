@@ -1,5 +1,9 @@
 package com.kofax.samples.mobilecapturedemo;
 
+/**
+ * Created by leonid.evlanov on 18.12.2017.
+ */
+
 import com.kofax.kmc.ken.engines.data.Image;
 
 public class Constants {

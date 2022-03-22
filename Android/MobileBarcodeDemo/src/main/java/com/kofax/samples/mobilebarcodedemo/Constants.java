@@ -14,5 +14,5 @@ public class Constants {
     final static int BARCODE_FOUND_REQUEST_ID = 59;
 
     final static int PROCESSED_IMAGE_RETAKE_RESPONSE_ID  = 156;
-    final static int PROCESSED_IMAGE_EMAIL_IS_SENT_RESPONSE_ID = 157;
+    final static int PROCESSED_IMAGE_MENU_HOME_ID = 157;
 }

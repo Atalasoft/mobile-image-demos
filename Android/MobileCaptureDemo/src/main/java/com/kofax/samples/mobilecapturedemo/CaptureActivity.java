@@ -41,6 +41,9 @@ import com.kofax.kmc.kut.utilities.Licensing;
 import com.kofax.samples.common.PermissionsManager;
 import com.kofax.samples.common.License;
 
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+
 public class CaptureActivity extends AppCompatActivity
         implements ActivityCompat.OnRequestPermissionsResultCallback, CameraInitializationListener, ImageCapturedListener, CameraInitializationFailedListener {
 
@@ -65,7 +68,7 @@ public class CaptureActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
 
         AppContextProvider.setContext(getApplicationContext());
-        Licensing.setMobileSDKLicense(License.PROCESS_PAGE_SDK_LICENSE);
+        //Licensing.setMobileSDKLicense(License.PROCESS_PAGE_SDK_LICENSE);
 
         if (!mPermissionsManager.isGranted(PERMISSIONS)) {
             mPermissionsManager.request(PERMISSIONS);
@@ -232,24 +235,17 @@ public class CaptureActivity extends AppCompatActivity
     }
 
     private Image decodeImageFromIntent(Intent data) {
-        Uri selectedImage = data.getData();
-        String[] filePathColumn = {MediaStore.Images.Media.DATA};
-
-        if (selectedImage == null) return null;
-
-        Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
-
-        if (cursor == null) return null;
-
-        cursor.moveToFirst();
-        int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-        String filePath = cursor.getString(columnIndex);
-        cursor.close();
-        Bitmap bitmap = BitmapFactory.decodeFile(filePath);
-        if(bitmap == null) {
-            return null;
+        try {
+            InputStream inStream = getContentResolver().openInputStream(data.getData());
+            Bitmap bitmap = BitmapFactory.decodeStream(inStream);
+            if (bitmap == null) {
+                return null;
+            }
+            return new Image(bitmap);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         }
-        return new Image(bitmap);
+        return null;
     }
 
 

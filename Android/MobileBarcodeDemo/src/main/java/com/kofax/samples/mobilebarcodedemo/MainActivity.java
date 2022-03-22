@@ -17,6 +17,10 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.kofax.kmc.kut.utilities.Licensing;
+import com.kofax.kmc.kut.utilities.error.ErrorInfo;
+import com.kofax.samples.common.License;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -114,45 +118,67 @@ public class MainActivity extends AppCompatActivity {
         if (mProgressDialog != null && mProgressDialog.isShowing()) mProgressDialog.dismiss();
 
         boolean check = true;
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        if (prefs.contains("pref_key_shots_count") || prefs.contains("pref_key_last_usage_date")) {
-            Date currentDate = new Date();
-            long currentTime = currentDate.getTime();
-            long lastUsage = prefs.getLong("pref_key_last_usage_date", -1);
-            Date lastUsageDate = new Date(lastUsage);
+        String errMessage = "";
 
-            if (lastUsage != -1 && ((currentTime - lastUsage) > 60 * 60 * 24 * 31 * 1000L)) {
-                // ok
-                SharedPreferences.Editor editor = prefs.edit();
-                editor.putInt("pref_key_shots_count", 0);
-                editor.apply();
-            } else {
-                String currentMonthStr   = new SimpleDateFormat("MM").format(currentDate);
-                String lastUsageMonthStr = new SimpleDateFormat("MM").format(lastUsageDate);
+        ErrorInfo licinfo = Licensing.setMobileSDKLicense(License.PROCESS_PAGE_SDK_LICENSE);
 
-                if (currentMonthStr.equals(lastUsageMonthStr)) {
-                    if (prefs.getInt("pref_key_shots_count", -1) >= Constants.MONTHLY_LIMIT) check = false;
-                } else {
+        if (licinfo == ErrorInfo.KMC_EV_LICENSE_EXPIRED || licinfo == ErrorInfo.KMC_IP_LICENSE_EXPIRED)
+        {
+            errMessage = (String)getText(R.string.license_expired_error_msg);
+            check = false;
+        }
+
+        if (licinfo == ErrorInfo.KMC_IP_LICENSE_INVALID)
+        {
+            errMessage = (String)getText(R.string.license_invalid_error_msg);
+            check = false;
+        }
+
+        if (check) {
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+            if (prefs.contains("pref_key_shots_count") || prefs.contains("pref_key_last_usage_date")) {
+                Date currentDate = new Date();
+                long currentTime = currentDate.getTime();
+                long lastUsage = prefs.getLong("pref_key_last_usage_date", -1);
+                Date lastUsageDate = new Date(lastUsage);
+
+                if (lastUsage != -1 && ((currentTime - lastUsage) > 60 * 60 * 24 * 31 * 1000L)) {
+                    // ok
                     SharedPreferences.Editor editor = prefs.edit();
                     editor.putInt("pref_key_shots_count", 0);
                     editor.apply();
+                } else {
+                    String currentMonthStr = new SimpleDateFormat("MM").format(currentDate);
+                    String lastUsageMonthStr = new SimpleDateFormat("MM").format(lastUsageDate);
+
+                    if (currentMonthStr.equals(lastUsageMonthStr)) {
+                        if (prefs.getInt("pref_key_shots_count", -1) >= Constants.MONTHLY_LIMIT) {
+                            errMessage = String.format((String) getText(R.string.monthly_limit_exceeded_msg), Constants.MONTHLY_LIMIT);
+                            check = false;
+                        }
+                    } else {
+                        SharedPreferences.Editor editor = prefs.edit();
+                        editor.putInt("pref_key_shots_count", 0);
+                        editor.apply();
+                    }
                 }
+            } else {
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putInt("pref_key_shots_count", 0);
+                editor.putLong("pref_key_last_usage_date", new Date().getTime());
+                editor.apply();
             }
-        } else {
-            SharedPreferences.Editor editor = prefs.edit();
-            editor.putInt("pref_key_shots_count", 0);
-            editor.putLong("pref_key_last_usage_date", new Date().getTime());
-            editor.apply();
         }
 
         if (!check) {
             mfabCapture.setVisibility(View.GONE);
             new AlertDialog.Builder(this)
                     .setTitle("Error")
-                    .setMessage( String.format((String)getText(R.string.monthly_limit_exceeded_msg), Constants.MONTHLY_LIMIT) )
+                    .setMessage(errMessage)
                     .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                         @Override
-                        public void onClick(DialogInterface dialog, int which) {                            
+                        public void onClick(DialogInterface dialog, int which) {
+                            //finish();
                         }
                     })
                     .setCancelable(false)

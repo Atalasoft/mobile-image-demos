@@ -94,10 +94,10 @@ public class ProcessImageActivity extends AppCompatActivity
         }
     }
 
-    private void showGalleryImagePath(View view) {
+    private void showGalleryImageSaveMessage(View view) {
         new AlertDialog.Builder(this)
                 .setTitle("Gallery save")
-                .setMessage("Image is saved to the gallery: " + mSavedImageGalleryPath)
+                .setMessage("Image is saved to the gallery.")
                 .setPositiveButton(android.R.string.ok, null)
                 .setCancelable(false)
                 .setIcon(R.drawable.ic_info_black_24dp)
@@ -135,16 +135,14 @@ public class ProcessImageActivity extends AppCompatActivity
         }
 
         if (mSavedImageGalleryPath != null) {
-            showGalleryImagePath(view);
+            showGalleryImageSaveMessage(view);
         }
     }
 
     private void saveToExternal(View view) {
         if (mSavedImageExternalPath == null) {
             File storageDir = new File(
-                    Environment.getExternalStoragePublicDirectory(
-                            Environment.DIRECTORY_PICTURES
-                    ),
+                    getExternalFilesDir(null),
                     Constants.PHOTO_ALBUM_NAME
             );
 
@@ -165,6 +163,7 @@ public class ProcessImageActivity extends AppCompatActivity
                 out.flush();
                 out.close();
 
+                //mSavedImageExternalPath = Uri.fromFile(file).toString();
                 mSavedImageExternalPath = FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID + ".provider", file).toString();
             } catch (Exception e) {
                 e.printStackTrace();
@@ -185,9 +184,9 @@ public class ProcessImageActivity extends AppCompatActivity
                 emailIntent.putExtra(Intent.EXTRA_TEXT, String.format("Here is the result of Atalasoft %s", getResources().getString(R.string.app_name)));
                 emailIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(mSavedImageExternalPath));
 
-                startActivityForResult(Intent.createChooser(emailIntent, "Send mail..."), Constants.SEND_EMAIL_REQUEST_ID);
+                startActivityForResult(Intent.createChooser(emailIntent, "Share"), Constants.SEND_EMAIL_REQUEST_ID);
             } catch (android.content.ActivityNotFoundException ex) {
-                Snackbar.make(this.findViewById(R.id.view_processed_image), "Error in email sending", Snackbar.LENGTH_LONG)
+                Snackbar.make(this.findViewById(R.id.view_processed_image), "Error in sharing", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         }
@@ -218,7 +217,7 @@ public class ProcessImageActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 if (mSavedImageGalleryPath != null) {
-                    showGalleryImagePath(view);
+                    showGalleryImageSaveMessage(view);
                 }  else if (checkWritePermissions(true)) {
                     saveToGallery(view);
                 }
@@ -243,39 +242,6 @@ public class ProcessImageActivity extends AppCompatActivity
                 }
             }
         });
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        switch (requestCode) {
-            case Constants.SEND_EMAIL_REQUEST_ID:
-                if (resultCode == RESULT_OK) {
-                    new AlertDialog.Builder(this)
-                            .setTitle("Info")
-                            .setMessage( "Email is sent" )
-                            .setPositiveButton(android.R.string.ok, null)
-                            .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    finish();
-                                }
-                            })
-                            .setCancelable(true)
-                            .setIcon(R.drawable.ic_info_black_24dp)
-                            .show();
-                } else {
-                    new AlertDialog.Builder(this)
-                            .setTitle("Error")
-                            .setMessage( "Email is not sent" )
-                            .setPositiveButton(android.R.string.ok, null)
-                            .setCancelable(false)
-                            .setIcon(R.drawable.error)
-                            .show();
-                }
-                break;
-        }
     }
 
     @Override
