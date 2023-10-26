@@ -12,6 +12,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Build;
 
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
@@ -153,7 +154,10 @@ public class CaptureActivity extends AppCompatActivity
                 @Override
                 public void onClick(View v) {
 
-                    String[] GALLERY_PERMISSIONS_REQUIRED = {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA};
+                    String[] GALLERY_PERMISSIONS_REQUIRED =
+                            (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) ?
+                            new String[]{ Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA } :
+                            new String[]{ Manifest.permission.READ_MEDIA_IMAGES, Manifest.permission.CAMERA };
 
                     if (mPermissionsManager.isGranted(GALLERY_PERMISSIONS_REQUIRED)) {
                         Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);

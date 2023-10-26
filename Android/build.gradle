@@ -18,12 +18,12 @@ buildscript {
 
 apply plugin: 'com.android.library'
 android {
-    compileSdkVersion 25
+    compileSdkVersion 33
 
 
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion 25
+        targetSdkVersion 33
 
         ndk {
             abiFilters "armeabi-v7a", "x86", "armeabi", "mips"

@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.PersistableBundle;
 import android.os.SystemClock;
+import android.os.Build;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -30,6 +31,7 @@ import com.kofax.kmc.kut.utilities.error.KmcException;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -40,11 +42,6 @@ public class ProcessImageActivity extends AppCompatActivity
 
     final int REQUEST_EXTERNAL_STORAGE_FOR_GALLERY  = 1;
     final int REQUEST_EXTERNAL_STORAGE_FOR_EXTERNAL = 2;
-    final String[] PERMISSIONS_STORAGE = {
-            Manifest.permission.READ_EXTERNAL_STORAGE,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
-    };
-
     private ImgReviewEditCntrl mImgReviewEditCntrl;
 
     private String mSavedImageGalleryPath;
@@ -55,42 +52,65 @@ public class ProcessImageActivity extends AppCompatActivity
     private boolean checkWritePermissions(final boolean isForGallery) {
         int permission = ActivityCompat.checkSelfPermission(ProcessImageActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
-        if (permission != PackageManager.PERMISSION_GRANTED) {
-            new AlertDialog.Builder(ProcessImageActivity.this)
-                    .setMessage(R.string.save_permissions_msg)
-                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            ActivityCompat.requestPermissions(
-                                    ProcessImageActivity.this,
-                                    PERMISSIONS_STORAGE,
-                                    isForGallery ? REQUEST_EXTERNAL_STORAGE_FOR_GALLERY : REQUEST_EXTERNAL_STORAGE_FOR_EXTERNAL
-                            );
-                        }
-                    })
-                    .setCancelable(false)
-                    .show();
+        final String[] PERMISSIONS_STORAGE =
+                (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) ?
+                new String[]{ Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE } :
+                new String[]{ Manifest.permission.WRITE_EXTERNAL_STORAGE };
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+            if (permission != PackageManager.PERMISSION_GRANTED) {
+                new AlertDialog.Builder(ProcessImageActivity.this)
+                        .setMessage(R.string.save_permissions_msg)
+                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                ActivityCompat.requestPermissions(
+                                        ProcessImageActivity.this,
+                                        PERMISSIONS_STORAGE,
+                                        isForGallery ? REQUEST_EXTERNAL_STORAGE_FOR_GALLERY : REQUEST_EXTERNAL_STORAGE_FOR_EXTERNAL
+                                );
+                            }
+                        })
+                        .setCancelable(false)
+                        .show();
+            }
+            return (permission == PackageManager.PERMISSION_GRANTED);
+        } else {
+            ActivityCompat.requestPermissions(
+                    ProcessImageActivity.this,
+                    PERMISSIONS_STORAGE,
+                    isForGallery ? REQUEST_EXTERNAL_STORAGE_FOR_GALLERY : REQUEST_EXTERNAL_STORAGE_FOR_EXTERNAL
+            );
+            return false;
         }
-        return (permission == PackageManager.PERMISSION_GRANTED);
     }
 
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
-        if (grantResults.length == 2 && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+            if (grantResults.length == 2 && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                if (requestCode == REQUEST_EXTERNAL_STORAGE_FOR_GALLERY) {
+                    saveToGallery(findViewById(R.id.view_processed_image));
+                } else {
+                    saveToExternal(findViewById(R.id.view_processed_image));
+                    sendEmail();
+                }
+            } else {
+                new AlertDialog.Builder(this)
+                        .setTitle("Error")
+                        .setMessage("Permissions are not given")
+                        .setPositiveButton(android.R.string.ok, null)
+                        .setCancelable(false)
+                        .setIcon(R.drawable.error)
+                        .show();
+            }
+        } else {
             if (requestCode == REQUEST_EXTERNAL_STORAGE_FOR_GALLERY) {
                 saveToGallery(findViewById(R.id.view_processed_image));
             } else {
                 saveToExternal(findViewById(R.id.view_processed_image));
                 sendEmail();
             }
-        } else {
-            new AlertDialog.Builder(this)
-                    .setTitle("Error")
-                    .setMessage( "Permissions are not given" )
-                    .setPositiveButton(android.R.string.ok, null)
-                    .setCancelable(false)
-                    .setIcon(R.drawable.error)
-                    .show();
         }
     }
 
