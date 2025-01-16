@@ -22,7 +22,7 @@
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
             android:layout_marginTop="10dp"
-            android:src="@drawable/logo_atalasoft_kofax_1600px"
+            android:src="@drawable/logo_atalasoft_tungsten_1600px"
             android:scaleType="centerInside"
             android:visibility="visible"/>
     </LinearLayout>

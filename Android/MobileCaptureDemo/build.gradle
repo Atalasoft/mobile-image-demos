@@ -3,14 +3,14 @@ apply plugin: 'com.android.application'
 def vcode = (int)(((new Date().getTime()/1000) - 1645454402) / 30)
 
 android {
-    compileSdkVersion 33
+    compileSdkVersion 34
 
     defaultConfig {
         applicationId "com.kofax.samples.mobilecapturedemo"
         minSdkVersion 23
-        targetSdkVersion 33
+        targetSdkVersion 34
         versionCode vcode
-        versionName "1.2.2"
+        versionName "1.2.3"
 
         ndk {
             abiFilters "armeabi-v7a", "x86", "x86_64", "armeabi", "arm64-v8a"

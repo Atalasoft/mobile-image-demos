@@ -50,7 +50,7 @@ public class LicenseAgreementActivity extends AppCompatActivity {
                 "this Agreement. Your use of the Software is also subject to the\n" +
                 "signed agreement between Atalasoft and your employer or in the\n" +
                 "absence of a signed agreement, Atalasoft&rsquo;s standard license\n" +
-                "terms as made available at </FONT><A HREF=\"http://www.Kofax.com/\"><FONT COLOR=\"#0000ff\"><FONT SIZE=2><U>www.Kofax.com</U></FONT></FONT></A><FONT SIZE=2>.</FONT></P>\n" +
+                "terms as made available at </FONT><A HREF=\"http://www.tungstenautomation.com/\"><FONT COLOR=\"#0000ff\"><FONT SIZE=2><U>www.tungstenautomation.com</U></FONT></FONT></A><FONT SIZE=2>.</FONT></P>\n" +
                 "<P STYLE=\"margin-top: 0.07in; margin-bottom: 0.07in\"><FONT SIZE=2><B>1.\n" +
                 "License.</B></FONT><FONT SIZE=2> Atalasoft grants to you a\n" +
                 "nontransferable, nonexclusive, license to install and use one copy of\n" +

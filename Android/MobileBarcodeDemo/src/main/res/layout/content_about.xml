@@ -23,7 +23,7 @@
             android:layout_marginStart="5dp"
             android:layout_marginEnd="5dp"
             android:layout_weight="4"
-            android:src="@drawable/logo_atalasoft_kofax_1600px"
+            android:src="@drawable/logo_atalasoft_tungsten_1600px"
             android:scaleType="centerInside"/>
 
         <WebView
@@ -48,7 +48,7 @@
             android:layout_marginStart="5dp"
             android:layout_marginEnd="5dp"
             android:layout_weight="3"
-            android:src="@drawable/logo_atalasoft_kofax_1600px"
+            android:src="@drawable/logo_atalasoft_tungsten_1600px"
             android:scaleType="centerInside"/>
 
         <WebView

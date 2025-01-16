@@ -8,7 +8,7 @@ import com.kofax.kmc.ken.engines.data.Image;
 
 public class Constants {
     static Image RESULT_IMAGE = null;
-    final static String PHOTO_ALBUM_NAME = "KofaxMobileCapture";
+    final static String PHOTO_ALBUM_NAME = "TungstenAutomationMobileCapture";
 
     static boolean IS_TORCH_SUPPORTED = false;
 

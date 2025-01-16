@@ -51,7 +51,7 @@ public class AboutActivity extends AppCompatActivity {
                 "<li style=\"clear: both;\">Version: " + Constants.VERSION + "</li>\n" +
                 "<li style=\"clear: both;\"><a href=\"mailto:sales@atalasoft.com\">sales@atalasoft.com</a></li>\n" +
                 "<li style=\"clear: both;\"><a title=\"Atalasoft\" href=\"http://hubs.ly/H03pzS80\">Atalasoft</a></li>\n" +
-                "<li style=\"clear: both;\"><a title=\"Online Privacy Policy Kofax\" href=\"https://www.kofax.com/legal/privacy\">Online Privacy Policy Kofax</a></li>\n" +
+                "<li style=\"clear: both;\"><a title=\"Online Privacy Policy Tungsten Automation\" href=\"https://www.tungstenautomation.com/legal/privacy\">Online Privacy Policy Tungsten Automation</a></li>\n" +
                 "</ol>\n" +
                 "</FONT></P>\n" +
                 "</BODY>\n" + "</HTML>";
