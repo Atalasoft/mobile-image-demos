@@ -10,6 +10,8 @@ import android.view.View;
 import android.webkit.WebView;
 import android.widget.LinearLayout;
 
+import com.kofax.kmc.kut.utilities.SdkVersion;
+
 public class AboutActivity extends AppCompatActivity {
     private LinearLayout mLayoutPortrait;
     private LinearLayout mLayoutLandscape;
@@ -27,6 +29,8 @@ public class AboutActivity extends AppCompatActivity {
         setContentView(R.layout.activity_about);
         Toolbar toolbar = (Toolbar) findViewById(R.id.about_toolbar);
         setSupportActionBar(toolbar);
+
+        String sdkVer = SdkVersion.getSdkVersion();
 
         String aboutStr = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">\n" +
                 "<HTML>\n" +
@@ -49,6 +53,7 @@ public class AboutActivity extends AppCompatActivity {
                 "<ol style=\"list-style: none; font-size: 14px; line-height: 32px; font-weight: bold;\">\n" +
                 "<li style=\"clear: both;\">MobileImage – document capture SDK from Atalasoft.</li>\n" +
                 "<li style=\"clear: both;\">Version: " + Constants.VERSION + "</li>\n" +
+                "<li style=\"clear: both;\">MobileSDK Version: " + sdkVer + "</li>\n" +
                 "<li style=\"clear: both;\"><a href=\"mailto:sales@atalasoft.com\">sales@atalasoft.com</a></li>\n" +
                 "<li style=\"clear: both;\"><a title=\"Atalasoft\" href=\"http://hubs.ly/H03pzS80\">Atalasoft</a></li>\n" +
                 "<li style=\"clear: both;\"><a title=\"Online Privacy Policy Tungsten Automation\" href=\"https://www.tungstenautomation.com/legal/privacy\">Online Privacy Policy Tungsten Automation</a></li>\n" +
