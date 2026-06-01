@@ -1,13 +1,14 @@
 package com.kofax.samples.mobilecapturedemo;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import android.view.View;
 
 import com.kofax.kmc.ken.engines.ImageProcessor;

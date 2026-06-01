@@ -1,20 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     tools:context="com.kofax.samples.mobilebarcodedemo.CaptureActivity">
 
     <include layout="@layout/content_capture" />
 
-    <android.support.design.widget.FloatingActionButton
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_torch"
-        android:layout_width="@dimen/fab_size_small"
-        android:layout_height="@dimen/fab_size_small"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="top|end"
         android:layout_margin="@dimen/fab_margin"
+        app:fabCustomSize="@dimen/fab_size_small"
+        app:maxImageSize="@dimen/fab_size_torch"
         app:srcCompat="@drawable/torch_button"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
-</android.support.design.widget.CoordinatorLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -15,13 +15,14 @@ import android.os.PersistableBundle;
 import android.os.SystemClock;
 import android.os.Build;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.FileProvider;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import androidx.annotation.NonNull;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.appcompat.widget.Toolbar;
+
+import androidx.core.content.FileProvider;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -144,7 +145,7 @@ public class ProcessImageActivity extends AppCompatActivity
                 Intent scanFileIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, photoUri);
                 view.getContext().sendBroadcast(scanFileIntent);
             } else {
-                new android.support.v7.app.AlertDialog.Builder(this)
+                new AlertDialog.Builder(this)
                         .setTitle("Error")
                         .setMessage( "Image cannot be saved to gallery" )
                         .setPositiveButton(android.R.string.ok, null)
@@ -223,7 +224,7 @@ public class ProcessImageActivity extends AppCompatActivity
         try {
             mImgReviewEditCntrl.setImage(Constants.RESULT_IMAGE);
         } catch (KmcException e) {
-            new android.support.v7.app.AlertDialog.Builder(this)
+            new AlertDialog.Builder(this)
                     .setTitle("Error")
                     .setMessage( "Image cannot be shown" )
                     .setPositiveButton(android.R.string.ok, null)

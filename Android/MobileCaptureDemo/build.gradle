@@ -11,12 +11,18 @@ android {
         minSdkVersion 26
         targetSdkVersion 35
         versionCode vcode
-        versionName "1.2.4"
+        versionName "1.2.5"
 
         ndk {
-            abiFilters "armeabi-v7a", "x86_64", "arm64-v8a"
+            abiFilters 'armeabi-v7a', 'arm64-v8a'
         }
         vectorDrawables.useSupportLibrary = true
+    }
+
+    packagingOptions {
+        exclude 'kotlin/*'
+        exclude 'kotlin/reflect/*'
+        exclude 'kotlin/coroutines/coroutines.kotlin_builtins'
     }
 
     repositories {
@@ -28,15 +34,34 @@ android {
             jniLibs.srcDirs = ['../MobileSDK_libs']
         }
     }
+
+    buildFeatures {
+        buildConfig = true
+    }
+
+    configurations.all {
+        exclude group: "com.android.tools", module: "common"
+        resolutionStrategy {
+            force "org.jetbrains.kotlin:kotlin-stdlib:1.9.10"
+        }
+    }
 }
 
 dependencies {
-    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
-    implementation 'com.android.support:support-v4:25.4.0'
-    implementation 'com.android.support:support-vector-drawable:25.4.0'
-    implementation 'com.android.support:design:25.4.0'
-    implementation fileTree(dir: '../MobileSDK_libs', include: ['*.jar'])
+    implementation 'androidx.constraintlayout:constraintlayout:2.2.0'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.vectordrawable:vectordrawable:1.1.0'
+    implementation 'com.google.android.material:material:1.11.0'
+    implementation fileTree(
+            dir: '../MobileSDK_libs',
+            exclude: ['javax.inject-1.jar','kotlin-stdlib-1.9.10.jar', 'kotlin-stdlib-jdk7-1.9.10.jar', 'kotlin-stdlib-jdk8-1.9.10.jar', 'annotations-13.0.jar'],
+            include: ['*.jar']
+    )
+    implementation("com.google.android.gms:play-services-mlkit-barcode-scanning:17.0.0") {
+        exclude group: "org.jetbrains.kotlin", module: "kotlin-stdlib"
+    }
     implementation(name: 'sdk-release', ext: 'aar')
+    implementation "androidx.constraintlayout:constraintlayout:2.1.4"
 
     implementation project(':')
 }

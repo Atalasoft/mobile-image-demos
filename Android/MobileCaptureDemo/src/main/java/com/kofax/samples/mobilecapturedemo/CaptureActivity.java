@@ -15,15 +15,15 @@ import android.os.Handler;
 import android.os.Build;
 
 import android.provider.MediaStore;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.kofax.kmc.ken.engines.data.DocumentDetectionSettings;
 import com.kofax.kmc.ken.engines.data.Image;
 import com.kofax.kmc.kui.uicontrols.CameraInitializationEvent;

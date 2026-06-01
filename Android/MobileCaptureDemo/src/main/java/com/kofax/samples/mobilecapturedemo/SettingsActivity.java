@@ -1,7 +1,7 @@
 package com.kofax.samples.mobilecapturedemo;
 
 
-import android.support.design.widget.Snackbar;
+import com.google.android.material.snackbar.Snackbar;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -9,7 +9,7 @@ import android.os.Bundle;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
-import android.support.v7.app.ActionBar;
+import androidx.appcompat.app.ActionBar;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 

@@ -1,9 +1,10 @@
 package com.kofax.samples.mobilebarcodedemo;
 
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
 import android.preference.PreferenceFragment;
 import android.view.MenuItem;
+
+import androidx.appcompat.app.ActionBar;
 
 public class SettingsActivity extends AppCompatPreferenceActivity {
     @Override
@@ -27,7 +28,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
     protected boolean isValidFragment(String fragmentName) {
         return PreferenceFragment.class.getName().equals(fragmentName) ||
-               BarcodesPreferenceFragment.class.getName().equals(fragmentName);
+                BarcodesPreferenceFragment.class.getName().equals(fragmentName);
     }
 
     public static class BarcodesPreferenceFragment extends PreferenceFragment {
