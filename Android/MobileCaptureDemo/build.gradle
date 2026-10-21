@@ -4,14 +4,14 @@ def vcode = (int)(((new Date().getTime()/1000) - 1645454402) / 30)
 
 android {
     namespace "com.kofax.samples.mobilecapturedemo"
-    compileSdkVersion 35
+    compileSdkVersion 36
 
     defaultConfig {
         applicationId "com.kofax.samples.mobilecapturedemo"
         minSdkVersion 26
-        targetSdkVersion 35
+        targetSdkVersion 36
         versionCode vcode
-        versionName "1.2.5"
+        versionName "1.2.6"
 
         ndk {
             abiFilters 'armeabi-v7a', 'arm64-v8a'
@@ -34,7 +34,6 @@ android {
             jniLibs.srcDirs = ['../MobileSDK_libs']
         }
     }
-
     buildFeatures {
         buildConfig = true
     }
